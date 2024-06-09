@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>De Olho no Condomínio</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/css.css') }}" />
+    <link rel="icon" type="image/png" href="{{ url_for('static',filename='img/fav.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/W3.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/FontAwesome4.7.0.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
+    <script src="{{ url_for('static',filename='js/jquery-3.7.0.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/js.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+				var coord = "{{ coord }}";
+				var set = "-23.1812991, -46.8829011";
+				var marker = null;
+				
+				if (coord != ""){
+					set = coord;
+					marker = coord;
+				}
+				
+				var latLng = set.split(", ");
+				var lat = parseFloat(latLng[0]);
+				var lon = parseFloat(latLng[1]);
+				var map = L.map('map').setView([lat, lon], 20);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            function onMapClick(e) {
+                if (marker) {
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng, {
+                        draggable: true
+                    }).addTo(map);
+                }
+                $('#coordenadas').val("https://www.google.com/maps/place/" + e.latlng.lat + "," + e.latlng.lng + "/@" + e.latlng.lat + "," + e.latlng.lng + "," + map.getZoom() + "z");
+            }
+            map.on('click', onMapClick);
+
+            function onZoomChange(e) {
+                $('#coordenadas').val("https://www.google.com/maps/place/" + map.getCenter().lat + "," + map.getCenter().lng + "/@" + map.getCenter().lat + "," + map.getCenter().lng + "," + map.getZoom() + "z");
+            }
+            map.on('zoomend', onZoomChange);
+            onZoomChange();
+        });
+    </script>
+</head>
+<body>
+    <div id="nav">
+        <i class="fa fa-bars menu" id="toggleButton"></i>
+        <a href="{{ url_for('home') }}"><p class="menu texto">De Olho no Condomínio</p></a>
+        <div class="navusr">
+            <a onclick="logoff()">
+                <h5>{{ user_name }}</h5>
+                <img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
+            </a>
+        </div>
+    </div>
+    <div class="barralateral">
+        <center>
+        <h3>Gerenciar Perfil</h3>
+        <br>
+        <img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
+        <h4 id="nomeusr">{{ user_name }}</h4>
+        <h4 id="ap">Apartamento {{ user_apartment }}</h4>
+        <input id="email" type="email" placeholder="{{ user_email }}" autocomplete="off" readonly><a>Editar</a>
+        <br>
+        <br>
+        <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="{{ user_phone }}" autocomplete="off" readonly><a>Editar</a>
+        <div class="menubottom">
+            <div id="opcoes" class="hidden">
+                <div style="position: fixed; bottom: 30px;">
+                    <form>
+                        <input id="senhaant" type="password" style="margin: 0px 0px 0px 50px;" placeholder="Senha antiga" required>
+                        <br>
+                        <input id="senhanov" type="password" style="margin: 15px 0px 0px 50px;" placeholder="Nova senha" required>
+                        <br>
+                        <input id="senhaconf" type="password" placeholder="Confirme a senha" required><a id="confirmar" style="text-decoration: none;">Confirmar</a>
+                        <br>
+                        <br>
+                    </form>
+                    <a id="cancelar">Cancelar</a>
+                </div>
+            </div>
+            <div id="altse">
+                <center>
+                    <a href="/chamados">Chamados</a>
+                </center>
+            </div>
+        </div>
+    </div>
+    <div class="barralateralbg">
+    </div>
+    <div class="corpo">
+        <center>
+            <h4 class="titulo">Abrir Chamado</h4>
+        </center>
+        <br>
+        <form action="/reparo" method="POST">
+            <div class="input-container">
+                <label for="local">Local / Andar: </label>
+                <input id="local" type="text" name="local" required>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <div style="float: left; width: 48%;">
+                    <center>
+                        <h6>Mapa</h6>
+                    </center>
+                    <div id="map" style="height: 65vh; width: 100%; border: solid 1px gray; border-radius: 8px;"></div>
+                </div>
+                <div style="float: right; width: 48%;">
+                    <center>
+                        <h6>Descrição</h6>
+                    </center>
+                    <textarea id="desc" name="mensagem" style="width: 100%; height: 65vh;" required></textarea>
+                    <br>
+                    <div style="float: right;">
+                        <button id="btnchamado" type="submit" style="margin: 30px 0px 30px 0px;">Abrir Chamado</button>
+                    </div>
+                </div>
+            </div>
+            <div style="display: block;">
+                <label for="coordenadas">Coordenadas:</label>
+                <input type="text" id="coordenadas" name="coordenadas" style="width: 85%;" readonly>
+                <input type="text" id="data" name="data" style="width: 85%;" readonly>
+                <script>
+                    // Função para obter a data formatada do servidor Node.js
+                    async function fetchDate() {
+                        try {
+                            const response = await fetch('http://localhost:3000/get-date');
+                            const data = await response.json();
+                            document.getElementById('data').value = data.date;
+                        } catch (error) {
+                            console.error('Erro ao obter a data:', error);
+                        }
+                    }
+            
+                    // Chama a função ao carregar a página
+                    window.onload = fetchDate;
+                </script>
+            </div>
+            <br>
+        </form>
+    </div>
+</body>
+</html>
