@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Resposta do Formulário</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/css.css') }}" />
+    <meta charset="UTF-8">
+</head>
+<body style="background-color: #424242;">
+    <h1>Dados Recebidos</h1>
+    <p>Login: {{ login }}</p>
+    <p>Senha: {{ senha }}</p>
+</body>
+</html>
