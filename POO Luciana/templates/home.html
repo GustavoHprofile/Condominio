@@ -2,7 +2,7 @@
 <html lang="pt-br">
 	<head>
 		<title>De Olho no Condomínio</title>
-		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/css.css')}}" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/css.css') }}">
 		<link rel="icon" type="image/png" href="{{url_for('static',filename='img/fav.png')}}">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="{{url_for('static',filename='css/W3.css')}}">
@@ -11,14 +11,14 @@
 		<script src="{{url_for('static',filename='js/jquery-3.7.0.js')}}"></script>
 		<script src="{{url_for('static',filename='js/js.js')}}"></script>
 	</head>
-	<body onload="adm()">
+	<body>
 		<div id="nav">
 			<i class="fa fa-bars menu" id="toggleButton"></i>
-			<a href="{{ url_for('home') }}"><p class="menu texto">De Olho no Condomínio</p></a>
+			<p class="menu texto">De Olho no Condomínio</p>
 			<div class="navusr">
 				<a onclick="logoff()">
 					<h5>{{ nome }}</h5>
-					<img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
+					<img class="usr" src="../static/img/6.jpg">
 				</a>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 			<br>
 			<img class="usr" src="../static/img/6.jpg">
 			<h4 id="nomeusr">{{ nome }}</h4>
-			<h4 id="ap">{{ endereco }}</h4>
+			<h4 id="ap">{{ endereco }}"</h4>
 			<input id="email" type="email" placeholder="email@email.com" value="{{ email }}" autocomplete="off" readonly>
 			<br>
 			<br>
@@ -55,41 +55,41 @@
 				</div>
 			</div>
 		</div>
-		</div>exit
 		<div class="barralateralbg">
 		</div>
 		<div class="corpo">
 			<center>
-				<h4 class="titulo">Chamados</h4>
+				<div class="grid">
+					<div class="grid_item" onclick="location.href='/reparo'">
+						<p>Reparo de Via</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/formulario'">
+						<p>Importunação do Sossego</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/reparo'">
+						<p>Limpeza</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/reparo'">
+						<p>Reparo de Dutos</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/reparo'">
+						<p>Queda de Fiação</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/reparo'">
+						<p>Combate a Dengue</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/reparo'">
+						<p>Reparo de Iluminação</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/solicitar'">
+						<p>Notificar Portaria</p>
+					</div>
+					<div class="grid_item" onclick="location.href='/sugestao'">
+						<p>Sugestões</p>
+					</div>
+					<br>
+				</div>
 			</center>
-			<h4 style="margin: 40px 0px 8px 15px;">Meus Chamados</h4>
-			<div class="chamados">
-				<ul>		
-					{% for notificacao in tabela %}
-					<li onclick="location.href('/notificacao')">
-						<div>{{ nome }}</div>
-						<div>{{ notificacao['Descricao'] }}</div>
-						<div>{{ notificacao['Local'] }}</div>
-						<div>{{ notificacao['Data'] }}</div>
-						<div>{{ notificacao['nomet'] }}</div>
-						<div><input type="checkbox" name="tratativa" disabled {{notificacao[Situ]}}></div></li>
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
-			<script>
-				function adm(){
-					var UsTipo = "{{ UsTipo }}";
-					var tratar = document.getElementById("tratar");
-
-					if (UsTipo == 1){
-						tratar.style.display = "block";
-					}
-				}
-			</script>
-			<form id="tratar" style="display: none; float: right;">
-				<button class="btn">Tratar Chamado</button>
-			</form>
 		</div>
 	</body>
 </html>

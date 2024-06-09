@@ -14,19 +14,8 @@
     <script src="{{ url_for('static',filename='js/js.js') }}"></script>
     <script>
         $(document).ready(function() {
-				var coord = "{{ coord }}";
-				var set = "-23.1812991, -46.8829011";
-				var marker = null;
-				
-				if (coord != ""){
-					set = coord;
-					marker = coord;
-				}
-				
-				var latLng = set.split(", ");
-				var lat = parseFloat(latLng[0]);
-				var lon = parseFloat(latLng[1]);
-				var map = L.map('map').setView([lat, lon], 20);
+            var map = L.map('map').setView([-23.1812991, -46.8829011], 20);
+            var marker = null;
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',

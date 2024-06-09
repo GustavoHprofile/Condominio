@@ -34,6 +34,20 @@
     <br>
     <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ tel }}" autocomplete="off" readonly>
         <div class="menubottom">
+            <div id="opcoes" class="hidden">
+                <div style="position: fixed; bottom: 30px;">
+                    <form>
+                        <input id="senhaant" type="password" style="margin: 0px 0px 0px 50px;" placeholder="Senha antiga" required>
+                        <br>
+                        <input id="senhanov" type="password" style="margin: 15px 0px 0px 50px;" placeholder="Nova senha" required>
+                        <br>
+                        <input id="senhaconf" type="password" placeholder="Confirme a senha" required><a id="confirmar" style="text-decoration: none;">Confirmar</a>
+                        <br>
+                        <br>
+                    </form>
+                    <a id="cancelar">Cancelar</a>
+                </div>
+            </div>
             <div id="altse">
                 <center>
                     <a href="/chamados">Chamados</a>
@@ -45,18 +59,18 @@
     </div>
     <div class="corpo">
         <center>
-            <h4 class="titulo">Sugestão</h4>
+            <h4 class="titulo">Abrir Reclamação</h4>
         </center>
         <br>
         <br>
-        <form action="/sugestao" method="POST">
+        <form action="/formulario" method="POST">
             <div class="input-container">
-                <label for="destinatario">Tema: </label>
+                <label for="destinatario">Local / Andar: </label>
                 <input type="text" id="destinatario" name="destinatario" required>
             </div>
             <br>
             <div class="input-container">
-                <label for="dataprevista">Data prevista: </label>
+                <label for="dataprevista">Periodo Ocorrido: </label>
                 <input type="text" id="dataprevista" name="dataprevista" required>
             </div>
             <br>
@@ -69,7 +83,7 @@
             <textarea type="text" id="mensagem" name="mensagem" required></textarea>
             <br>
             <br>
-            <button id="btnchamado" type="submit">Abrir Sugestão</button>
+            <button id="btnchamado" type="submit">Abrir Reclamação</button>
         </form>
         <br>
     </div>

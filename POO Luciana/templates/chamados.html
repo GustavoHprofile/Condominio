@@ -14,25 +14,25 @@
 	<body onload="adm()">
 		<div id="nav">
 			<i class="fa fa-bars menu" id="toggleButton"></i>
-			<a href="{{ url_for('home') }}"><p class="menu texto">De Olho no Condomínio</p></a>
+			<p class="menu texto">De Olho no Condomínio</p>
 			<div class="navusr">
 				<a onclick="logoff()">
 					<h5>{{ nome }}</h5>
-					<img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
+					<img class="usr" src="../static/img/6.jpg">
 				</a>
 			</div>
 		</div>
-		<div class="barralateral">
-			<center>
-			<h3>Gerenciar Perfil</h3>
-			<br>
-			<img class="usr" src="../static/img/6.jpg">
-			<h4 id="nomeusr">{{ nome }}</h4>
-			<h4 id="ap">{{ endereco }}</h4>
-			<input id="email" type="email" placeholder="email@email.com" value="{{ email }}" autocomplete="off" readonly>
-			<br>
-			<br>
-			<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ tel }}" autocomplete="off" readonly>
+	<div class="barralateral">
+		<center>
+		<h3>Gerenciar Perfil</h3>
+		<br>
+		<img class="usr" src="../static/img/6.jpg">
+		<h4 id="nomeusr">{{ nome }}</h4>
+		<h4 id="ap">{{ endereco }}"</h4>
+		<input id="email" type="email" placeholder="email@email.com" value="{{ email }}" autocomplete="off" readonly>
+		<br>
+		<br>
+		<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ tel }}" autocomplete="off" readonly>
 			<div class="menubottom">
 				<div id="opcoes" class="hidden">
 					<div style="position: fixed; bottom: 30px;">
@@ -50,12 +50,11 @@
 				</div>
 				<div id="altse">
 					<center>
-						<a href="/chamados">Chamados</a>
+						<a id="/chamados">Chamados</a>
 					</center>
 				</div>
 			</div>
 		</div>
-		</div>exit
 		<div class="barralateralbg">
 		</div>
 		<div class="corpo">
@@ -65,14 +64,14 @@
 			<h4 style="margin: 40px 0px 8px 15px;">Meus Chamados</h4>
 			<div class="chamados">
 				<ul>		
-					{% for notificacao in tabela %}
-					<li onclick="location.href('/notificacao')">
-						<div>{{ nome }}</div>
-						<div>{{ notificacao['Descricao'] }}</div>
-						<div>{{ notificacao['Local'] }}</div>
-						<div>{{ notificacao['Data'] }}</div>
-						<div>{{ notificacao['nomet'] }}</div>
-						<div><input type="checkbox" name="tratativa" disabled {{notificacao[Situ]}}></div></li>
+					{% for chamado in tabela %}
+					<li>
+						<div>{{ chamado['Autor']}}</div>
+						<div>{{ chamado['Descricao'] }}</div>
+						<div>{{ chamado['Local'] }}</div>
+						<div>{{ chamado['Data'] }}</div>
+						<div>{{ chamado['nomet'] }}</div>
+						<div><input type="checkbox" name="tratativa" value="{{chamado['Situ'] }}"></div></li>
 					</li>
 					{% endfor %}
 				</ul>
