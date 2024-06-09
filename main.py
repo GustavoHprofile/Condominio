@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, current_app,  jsonify
-from usuario import Morador, Notificacao, Reparo, Sugestao
+from usuario import Morador, Notificacao, Reparo, Sugestao, Sindico
 from pymongo import MongoClient, errors
 import certifi
 from datetime import datetime
@@ -119,13 +119,16 @@ def log():
 
     documento = coll.find_one(filtro)
 
-    if documento is not None and senha == documento['UsSenha']:
-        current_app.config['logado'] = documento
-        if documento['UsTipo'] == '1':
-            return redirect(url_for('listar_chamados'))
-        else:
-            return redirect(url_for('home'))
-        
+    if (documento is not None and senha == documento['UsSenha']):
+        #tipo de usuário
+            if(documento['UsTipo'] == '1'):
+                usuario = Sindico(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['Senha'], documento['UsTelefone'], documento['UsEndereco'])
+                current_app.config['logado'] = usuario
+                return render_template('chamados.html', usu = usuario)
+            else:
+                usuario = Morador(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
+                current_app.config['logado'] = usuario
+                return render_template('home.html', usu = usuario)
 # Log Out 
 @app.route('/logout')
 def logout():
@@ -135,7 +138,8 @@ def logout():
 @app.route('/home')
 def home():
     if current_app.config['logado'] != False:
-        return render_template('home.html', nome=current_app.config['logado']['UsNom'], email=current_app.config['logado']['UsEma'], endereco=current_app.config['logado']['UsEndereco'], tel=current_app.config['logado']['UsTelefone'])
+        usu = current_app.config['logado']
+        return render_template('home.html',usu = usu)
     else:
         return render_template('index.html')
     
@@ -159,7 +163,7 @@ def cadastrar():
             endereco
         )
 
-        bosta = usuario.cadastrar()
+        cad = usuario.cadastrar()
 
         return redirect(url_for('home'))
     return render_template('cadastrar.html')
@@ -167,6 +171,7 @@ def cadastrar():
 @app.route('/chamados')
 def listar_chamados():
     if current_app.config['logado'] != False:
+        usu = current_app.config['logado']
         if current_app.config['logado']['UsTipo'] == '0':
             filtro = {'UsDoc': current_app.config['logado']['UsDoc']}
             rps = coll.find(filtro)
@@ -185,7 +190,7 @@ def listar_chamados():
                 'nomet':notificacao['NomeT']
             }
             chamados.append(chamado)
-        return render_template('chamados.html', nome=current_app.config['logado']['UsNom'], email=current_app.config['logado']['UsEma'], endereco=current_app.config['logado']['UsEndereco'], tel=current_app.config['logado']['UsTelefone'], tabela=chamados)
+        return render_template('chamados.html', usu = usu)
     else:
         return render_template('index.html')
 
@@ -193,7 +198,8 @@ def listar_chamados():
 @app.route('/formulario')
 def formulario():
     if(current_app.config['logado'] != False):
-        return render_template('formulario.html', nome=current_app.config['logado']['UsNom'], email=current_app.config['logado']['UsEma'], endereco=current_app.config['logado']['UsEndereco'], tel=current_app.config['logado']['UsTelefone'])
+        usu = current_app.config['logado']
+        return render_template('formulario.html',usu = usu)
     else:
         return render_template('index.html')
     

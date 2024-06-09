@@ -53,6 +53,7 @@ class Morador(Usuario):
     def __init__(self, nome_completo, documento, email, senha, telefone, endereco):
         super().__init__(nome_completo, documento, email, senha, telefone)
         self.endereco = endereco
+    #Função de Cadastor da rota /cadastrar
     def cadastrar(self):
         document = {
             'UsDoc': self.documento,
@@ -65,29 +66,20 @@ class Morador(Usuario):
         }
 
         coll.insert_one(document)
+        return
+     #Função de logar da rota /log
 
-        return 
+        
        
 class Sindico(Usuario):
     def __init__(self, nome_completo, documento, email, senha, telefone, endereco):
         super().__init__(nome_completo, documento, email, senha, telefone)
         self.endereco = endereco
-    def cadastrar(self):
-        document = {
-            'UsDoc': self.documento,
-            'UsNom': self.nome_completo,
-            'UsEma': self.email,
-            'UsSenha' : self.senha,
-            'UsEndereco' : '',
-            'UsTipo' : '1',
-            'UsTelefone' : self.telefone
-        }
+        self.tipo = '1'
+    def tratar():
+        return
 
-        if(coll.insert_one(document)):
-            return 'ok'
-        else:
-            return 'nok'
-
+#==========================================================================================================================
 class Condominio:
     def __init__(self, nome_cond, cnpj, endereco_c):
         self.nome_cond = nome_cond
