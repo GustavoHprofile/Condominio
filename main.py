@@ -76,6 +76,7 @@ def insert_queixa(sugestao):
         "Data":sugestao.data,
         "Desc":sugestao.descricao
     })
+
 #Função para inserir Queixas 
 def insert_sugestoes(sugestao):
     coll.insert_one({
@@ -88,7 +89,6 @@ def insert_sugestoes(sugestao):
 })
     
 app = Flask(__name__)
-
 app.config['logado'] = False
 app.config['reparos'] = False
 
@@ -151,19 +151,17 @@ def cadastrar():
         endereco = request.form.get('endereco')
 
         usuario = Morador(
-            nome_completo=nome_completo,
-            documento=documento,
-            email=email,
-            senha=senha,
-            tipo="0",
-            telefone=telefone,
-            endereco=endereco
+            nome_completo,
+            documento,
+            email,
+            senha,
+            telefone,
+            endereco
         )
 
-        insert_usuario(usuario)
+        bosta = usuario.cadastrar()
 
-        return redirect(url_for('home'))  # Redireciona para a página inicial após criar o cadastro
-
+        return redirect(url_for('home'))
     return render_template('cadastrar.html')
 
 @app.route('/chamados')
