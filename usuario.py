@@ -53,6 +53,7 @@ class Morador(Usuario):
     def __init__(self, nome_completo, documento, email, senha, telefone, endereco):
         super().__init__(nome_completo, documento, email, senha, telefone)
         self.endereco = endereco
+        self.tipo = '0'
     #Função de Cadastor da rota /cadastrar
     def cadastrar(self):
         document = {
@@ -67,7 +68,9 @@ class Morador(Usuario):
 
         coll.insert_one(document)
         return
-     #Função de logar da rota /log
+    
+     #Função para puxar os chamados
+
 
         
        
@@ -86,6 +89,86 @@ class Condominio:
         self.cnpj = cnpj
         self.endereco_c = endereco_c
 
+
+#Chamados ===========================================================================================================
+class Chamado:
+    def __init__(self, autor, descricao, local, data, situacao, tipo):
+        self.autor = autor
+        self.descricao = descricao
+        self.local = local
+        self.campo = 'Chamado'
+        self.data = data
+        self.situacao = situacao
+        self.tipo = tipo
+    
+#Notificação referênte a solicitar
+class Notificacao(Chamado):
+    def __init__(self, autor, descricao, local,  data, situacao, tipo, dataprevista):
+        super().__init__(autor, descricao, local, data, situacao, tipo)
+        self.dataprevista = dataprevista
+        self.tipo = 'Notificacao'
+
+    def inserir(self):
+        documento = {
+            'autor': self.autor,
+            'descricao': self.descricao,
+            'local':self.local,
+            'campo': self.campo,
+            'data': self.data,
+            'situacao': self.situacao,
+            'tipo':self.tipo,
+            'datapre': self.dataprevista
+        }
+
+        coll.insert_one(documento)
+        return 
+
+#Reparo referente a reparo
+class Reparo(Chamado):
+    def __init__(self, autor, descricao, local, data,  situacao, tipo, coordenadas):
+        super().__init__(autor, descricao, local, data, situacao, tipo)
+        self.cord = coordenadas
+        self.tipo = 'Reparo'
+    
+    def inserir(self):
+        document = {
+            'autor': self.autor,
+            'descricao': self.descricao,
+            'local':self.local,
+            'campo': self.campo,
+            'data': self.data,
+            'situacao': self.situacao,
+            'tipo': self.tipo,
+            'coordenadas': self.cord
+        }
+
+        coll.insert_one(document)
+        
+        return
+#Queixa referente a formulario
+class Queixa:
+    def __init__(self, autor, descricao, local, data, situacao, tipo, frequencia, responsavel):
+        super().__init__(autor, descricao, local, data, situacao, tipo)
+        self.responsavel = responsavel
+        self.frequencia = frequencia
+
+    def inserir(self):
+        document = {
+            'autor': self.autor,
+            'descricao': self.descricao,
+            'local':self.local,
+            'campo': self.campo,
+            'data': self.data,
+            'situacao': self.situacao,
+            'tipo': self.tipo,
+            'responsavel': self.responsavel,
+            'frequencia' : self.frequencia
+        }
+
+        coll.insert_one(document)
+
+        return
+#Sugestão ======================================================================================================
 class Sugestao:
     def __init__(self, autor, tema, data, descricao):
         self.autor = autor
@@ -93,31 +176,3 @@ class Sugestao:
         self.data = data
         self.descricao = descricao
 
-class Notificacao:
-    def __init__(self, mensagem, data, dataprevista, situacao, autor, local):
-        self.autor = autor,
-        self.mensagem = mensagem
-        self.data = data
-        self.dataprevista = dataprevista
-        self.situacao = situacao
-        self.local = local
-        
-class Reparo:
-    def __init__(self, local, descricao, data, autor, situ, tipo, cordenadas):
-        self.local = local
-        self.descricao = descricao
-        self.cord = cordenadas
-        self.data = data
-        self.autor = autor
-        self.tipo = tipo 
-        self.situ = situ
-        
-
-class QueixaSossego:
-    def __init__(self, local, descricao, data, responsavel, autor, frequencia):
-        self.local = local
-        self.descricao = descricao
-        self.data = data
-        self.responsavel = responsavel
-        self.autor = autor
-        self.frequencia = frequencia

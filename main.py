@@ -212,14 +212,8 @@ def recuperar():
 @app.route('/reparo')
 def reparo():
     if(current_app.config['logado'] != False):
-        if(current_app.config['logado']['UsTipo'] == 0):
-            filtro = {'UsDoc':current_app.config['logado']['UsDoc']}
-
-            rps = coll.find(filtro)
-            return render_template('reparo.html', nome=current_app.config['logado']['UsNom'], email=current_app.config['logado']['UsEma'], endereco=current_app.config['logado']['UsEndereco'], tel=current_app.config['logado']['UsTelefone'], rps=rps)
-        else:
-            rps = coll.find()
-            return render_template('reparo.html', nome=current_app.config['logado']['UsNom'], email=current_app.config['logado']['UsEma'], endereco=current_app.config['logado']['UsEndereco'], tel=current_app.config['logado']['UsTelefone'], rps=rps)
+        usu = current_app.config['logado'] 
+        return render_template('reparo.html',usu = usu)
     else:
         return render_template('index.html')
 
@@ -248,9 +242,9 @@ def solicitar():
 
             insert_notificacao(notificacao)
             return redirect(url_for('home'))  # Redireciona para a página inicial após criar a notificação
-
-    return render_template('solicitar.html')
-
+        usu = current_app.config['logado']
+        return render_template('solicitar.html', usu=usu)
+    return render_template('index.html')    
 @app.route('/sugestao', methods=['GET', 'POST'])
 def sugestao():
     if request.method == 'POST':
@@ -280,27 +274,53 @@ def queixasossego():
     
     return render_template('sugestao.html')
 
-@app.route('/reparo', methods=['GET', 'POST'])
-def duto():
-    if(current_app.config['logado']!=False):
-        if request.method == 'POST':
-            local = request.form.get('local')
-            descricao = request.form.get('descricao')
-            cordenada = request.form.get('coordenadas')
-            tipo="Tubulação"
-            situ = ""
-            data = datetime.now()
+#inserir chamados ===============================================================================================
 
-            # Supondo que o autor seja o usuário logado
-            autor = current_app.config['logado']['UsDoc'] 
-            
-            reparo = Reparo(local, descricao, data, autor, situ, tipo, cordenada)
+#NOTIFICAÇÕES
+@app.route('/noti',  methods=['GET', 'POST'])
+def noti():
+    usu = current_app.config['logado']
+    if request.method == 'POST':
+        descricao = request.form.get('descricao')
+        local = request.form.get('local')
+        dataprevista = request.form.get('dataprevista')
+        autor = request.form.get('autor')
+        data = 'hoje'
+        situacao = ''
+        tipo = 'tubulacao'
+        
+        
+        solicitar = Notificacao( autor, descricao, local, data, situacao, tipo, dataprevista)
+        solicitar.inserir()
 
-            insert_reparo(reparo)
-        return redirect(url_for('home'))  # Redireciona para a página inicial após criar o reparo
+        return redirect(url_for('home'))
+    return render_template('home.html',usu)
 
-    return render_template('reparo.html')
+#REPAROS
+@app.route('/rep', methods=['GET', 'POST'])
+def rep():
+    usu = current_app.config['logado']
+    if request.method == 'POST':
+        autor = request.form.get('autor')
+        descricao = request.form.get('descricao')
+        local = request.form.get('local')
+        coordenadas = request.form.get('coordenadas')
+        data = 'hoje'
+        situacao = ''
+        tipo = ''
+        
+        obj = Reparo(autor, descricao, local, data,  situacao, tipo, coordenadas)
 
+        obj.inserir()
 
+        return redirect(url_for('home'))
+    return render_template('home.html', usu = usu)
+
+#Queixas
+@app.route('/que', methods=['GET', 'POST'])
+def que():
+    usu = current_app.config['logado']
+    if request.method == 'POST':
+        
 if __name__ == '__main__':
     app.run(debug=True)
