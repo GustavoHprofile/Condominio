@@ -69,16 +69,46 @@ class Morador(Usuario):
         coll.insert_one(document)
         return
     
-     #Função para puxar os chamados
+    #Função para puxar os chamados
 
-
+    def chamados(self):
+        documento = []
         
-       
+        filtro = {'autor': self.nome_completo}
+
+        obj = coll.find(filtro)
+
+        for doc  in obj:
+            chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'])
+
+            documento.append(chamado)
+
+        return documento
+    
+    
 class Sindico(Usuario):
     def __init__(self, nome_completo, documento, email, senha, telefone, endereco):
         super().__init__(nome_completo, documento, email, senha, telefone)
         self.endereco = endereco
         self.tipo = '1'
+      
+
+#Função para puxar os chamados 
+    def chamados(self):
+        documento = []
+        
+        filtro = {'campo': 'Chamado'}
+
+        obj = coll.find(filtro)
+
+        for doc  in obj:
+            chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'])
+
+            documento.append(chamado)
+
+        return documento
+
+#Tratar
     def tratar():
         return
 
@@ -146,7 +176,7 @@ class Reparo(Chamado):
         
         return
 #Queixa referente a formulario
-class Queixa:
+class Queixa(Chamado):
     def __init__(self, autor, descricao, local, data, situacao, tipo, frequencia, responsavel):
         super().__init__(autor, descricao, local, data, situacao, tipo)
         self.responsavel = responsavel
@@ -175,4 +205,17 @@ class Sugestao:
         self.tema = tema
         self.data = data
         self.descricao = descricao
+        self.campo = 'sug'
+    
+    def inserir(self):
+        documento = {
+            'campo': self.campo,
+            'autor': self.autor,
+            'tema': self.tema,
+            'data': self.data,
+            'descricao': self.descricao
+        }
 
+        coll.insert_one(documento)
+
+        return

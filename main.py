@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, current_app,  jsonify
-from usuario import Morador, Notificacao, Reparo, Sugestao, Sindico
+from usuario import Morador, Notificacao, Reparo, Sugestao, Sindico, Queixa
 from pymongo import MongoClient, errors
 import certifi
 from datetime import datetime
@@ -28,65 +28,7 @@ except Exception as e:
     print(f"Outro erro ocorreu: {e}")
     exit()
 
-# Função para inserir usuário no MongoDB
-def insert_usuario(usuario):
-    coll.insert_one({
-        "UsDoc": usuario.documento,
-        "UsNom": usuario.nome_completo,
-        "UsEma": usuario.email,
-        "UsSenha": usuario.senha,
-        "UsEndereco": usuario.endereco,
-        "UsTipo": usuario.tipo,
-        "UsTelefone": usuario.telefone
-    })
 
-# Função para inserir notificação no MongoDB
-def insert_notificacao(notificacao):
-    coll.insert_one({
-        "Campo":"Chamado",
-        "NomeT": "Notificacao",
-        "Autor":notificacao.autor,
-        "Local": notificacao.local,
-        "Descricao": notificacao.mensagem,
-        "Data": notificacao.data,
-        "DataPre": notificacao.dataprevista,
-        "Situ": notificacao.situacao
-    })
-
-# Função para inserir reparo no MongoDB
-def insert_reparo(reparo):
-    coll.insert_one({
-        "Campo":"Chamado",
-        "NomeT": "Reparo",
-        "Tipo":reparo.tipo,
-        "Cod":reparo.cord,  
-        "Situ":reparo.situ,
-        "Local": reparo.local,
-        "Descricao": reparo.descricao,
-        "Data": reparo.data,
-        "Autor": reparo.autor
-    })
-#Função para inserir sugestões no MongoDB
-def insert_queixa(sugestao):
-    coll.insert_one({
-        "Campo":"Chamado",
-        "NomeT":"Queixa",
-        "Autor":sugestao.autor,
-        "Tema":sugestao.tema,
-        "Data":sugestao.data,
-        "Desc":sugestao.descricao
-    })
-
-#Função para inserir Queixas 
-def insert_sugestoes(sugestao):
-    coll.insert_one({
-        "Campo":"Chamado",
-        "NomeT":"Sugestão",
-        "Autor":sugestao.autor,
-        "Tema":sugestao.tema,
-        "Data":sugestao.data,
-        "Desc":sugestao.descricao
-})
     
 app = Flask(__name__)
 app.config['logado'] = False
@@ -118,23 +60,31 @@ def log():
     filtro = {'UsEma': login}
 
     documento = coll.find_one(filtro)
-
+    
     if (documento is not None and senha == documento['UsSenha']):
         #tipo de usuário
-            if(documento['UsTipo'] == '1'):
-                usuario = Sindico(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['Senha'], documento['UsTelefone'], documento['UsEndereco'])
-                current_app.config['logado'] = usuario
-                return render_template('chamados.html', usu = usuario)
-            else:
-                usuario = Morador(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
-                current_app.config['logado'] = usuario
-                return render_template('home.html', usu = usuario)
+        if(documento['UsTipo'] == '1'):
+            usuario = Sindico(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
+            current_app.config['logado'] = usuario
+            usu = current_app.config['logado']
+
+            chamados = usu.chamados()
+
+            return render_template('chamados.html', usu = usu, chamados = chamados)
+        else:
+            usuario = Morador(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
+            current_app.config['logado'] = usuario
+            return render_template('home.html', usu = usuario)
+    else:
+        return render_template('index.html')
 # Log Out 
 @app.route('/logout')
 def logout():
     current_app.config['logado'] = False
     return render_template('index.html')
 
+
+#Páginas
 @app.route('/home')
 def home():
     if current_app.config['logado'] != False:
@@ -172,25 +122,10 @@ def cadastrar():
 def listar_chamados():
     if current_app.config['logado'] != False:
         usu = current_app.config['logado']
-        if current_app.config['logado']['UsTipo'] == '0':
-            filtro = {'UsDoc': current_app.config['logado']['UsDoc']}
-            rps = coll.find(filtro)
-        else:
-            rps = coll.find()
 
-        chamados = []
-        for notificacao in coll.find({"NomeT": "Notificacao"}):
-            autor = current_app.config['logado']['UsNom']
-            chamado = {
-                'Autor': autor,
-                'Descricao': notificacao['Descricao'],
-                'Local': notificacao['Local'],
-                'Data': notificacao['Data'],
-                'Situ':notificacao['Situ'],
-                'nomet':notificacao['NomeT']
-            }
-            chamados.append(chamado)
-        return render_template('chamados.html', usu = usu)
+        chamados = usu.chamados()
+
+        return render_template('chamados.html', usu = usu, chamados = chamados)
     else:
         return render_template('index.html')
 
@@ -206,14 +141,31 @@ def formulario():
 @app.route('/recuperar')
 def recuperar():
     return render_template('recuperar.html')
-
-       
+    
     
 @app.route('/reparo')
 def reparo():
     if(current_app.config['logado'] != False):
         usu = current_app.config['logado'] 
         return render_template('reparo.html',usu = usu)
+    else:
+        return render_template('index.html')
+    
+@app.route('/sugestao')
+def sugestao():
+    if(current_app.config['logado'] != False):
+        usu = current_app.config['logado']
+
+        return render_template('sugestao.html', usu = usu)
+    else:
+        return render_template('index.html')
+
+@app.route('/solicitar')
+def solicitar():
+    if(current_app.config['logado'] != False):
+        usu = current_app.config['logado']
+
+        return render_template('solicitar.html', usu = usu)
     else:
         return render_template('index.html')
 
@@ -224,55 +176,6 @@ def excluir():
     else:
         return render_template('index.html')
 
-# Rota para solicitar uma nova notificação
-
-@app.route('/solicitar', methods=['GET', 'POST'])
-def solicitar():
-    if(current_app.config['logado'] != False):
-        if request.method == 'POST':
-            local = request.form.get('local')
-            mensagem = request.form.get('mensagem')
-            dataprevista = request.form.get('dataprevista')
-            situacao = ""
-            autor = current_app.config['logado']
-            data='hoje'
-
-
-            notificacao = Notificacao(mensagem, data, dataprevista, situacao, autor, local)
-
-            insert_notificacao(notificacao)
-            return redirect(url_for('home'))  # Redireciona para a página inicial após criar a notificação
-        usu = current_app.config['logado']
-        return render_template('solicitar.html', usu=usu)
-    return render_template('index.html')    
-@app.route('/sugestao', methods=['GET', 'POST'])
-def sugestao():
-    if request.method == 'POST':
-        tema = request.form.get('destinatario')
-        descricao = request.form.get('mensagem')
-        data = request.form.get('dataprevista')
-
-        autor = current_app.config['logado']['UsDoc']
-        notificacao = Sugestao(autor, tema, data, descricao)
-        insert_sugestoes(notificacao)
-        return redirect(url_for('home'))  # Redireciona para a página inicial após criar a notificação
-
-    return render_template('sugestao.html')
-
-# Rota para relatar uma queixa de sossego
-@app.route('/formulario', methods=['GET', 'POST'])
-def queixasossego():
-    if request.method == 'POST':
-        tema = request.form.get('destinatario')
-        descricao = request.form.get('mensagem')
-        data = request.form.get('dataprevista')
-
-        autor = current_app.config['logado']['UsDoc']
-        notificacao = Sugestao(autor, tema, data, descricao)
-        insert_queixa(notificacao)
-        return redirect(url_for('home'))  
-    
-    return render_template('sugestao.html')
 
 #inserir chamados ===============================================================================================
 
@@ -316,11 +219,27 @@ def rep():
         return redirect(url_for('home'))
     return render_template('home.html', usu = usu)
 
-#Queixas
+#QUEIXA
 @app.route('/que', methods=['GET', 'POST'])
 def que():
     usu = current_app.config['logado']
     if request.method == 'POST':
+        autor = request.form.get('autor')
+        descricao = request.form.get('descricao')
+        local = request.form.get('local')
+        data = request.form.get('data')
+        frequencia = 'Ta faltando no formulário' #modifica no lugar da escrita
+        responsavel = 'Ta faltando tbm Jhow'
+        situacao = ''
+        tipo = 'Queixa'
+
+
+        obj = Queixa(autor, descricao, local, data, situacao, tipo, frequencia, responsavel) 
+
+        obj.inserir()
+
+        return redirect(url_for('home'))
+    return render_template('home.html', usu = usu)
         
 if __name__ == '__main__':
     app.run(debug=True)

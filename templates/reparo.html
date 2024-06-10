@@ -59,7 +59,7 @@
         <a href="{{ url_for('home') }}"><p class="menu texto">De Olho no Condomínio</p></a>
         <div class="navusr">
             <a onclick="logoff()">
-                <h5>{{ user_name }}</h5>
+                <h5>{{ usu.nome_completo }}</h5>
                 <img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
             </a>
         </div>
@@ -69,12 +69,12 @@
         <h3>Gerenciar Perfil</h3>
         <br>
         <img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
-        <h4 id="nomeusr">{{ user_name }}</h4>
-        <h4 id="ap">Apartamento {{ user_apartment }}</h4>
-        <input id="email" type="email" placeholder="{{ user_email }}" autocomplete="off" readonly><a>Editar</a>
+        <h4 id="nomeusr">{{ usu.nome_completo }}</h4>
+        <h4 id="ap">Apartamento {{ usu.endereco }}</h4>
+        <input id="email" type="email" placeholder="{{ usu.email }}" autocomplete="off" readonly><a>Editar</a>
         <br>
         <br>
-        <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="{{ user_phone }}" autocomplete="off" readonly><a>Editar</a>
+        <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="{{ usu.telefone}}" autocomplete="off" readonly><a>Editar</a>
         <div class="menubottom">
             <div id="opcoes" class="hidden">
                 <div style="position: fixed; bottom: 30px;">
@@ -128,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div style="display: block;">
+            <div style="display: none;">
                 <label for="coordenadas">Coordenadas:</label>
                 <input type="text" id="coordenadas" name="coordenadas" style="width: 85%;" readonly>
                 <input type="text" id="data" name="data" style="width: 85%;" readonly>

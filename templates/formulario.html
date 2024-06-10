@@ -63,7 +63,7 @@
         </center>
         <br>
         <br>
-        <form action="/formulario" method="POST">
+        <form action="/que" method="POST">
             <div class="input-container">
                 <label for="destinatario">Local / Andar: </label>
                 <input type="text" id="destinatario" name="destinatario" required>
@@ -80,9 +80,10 @@
             </center>
             <br>
             <br>
-            <textarea type="text" id="mensagem" name="mensagem" required></textarea>
+            <textarea type="text" id="mensagem" name="descricao" required></textarea>
             <br>
             <br>
+            <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
             <button id="btnchamado" type="submit">Abrir Reclamação</button>
         </form>
         <br>
