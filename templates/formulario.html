@@ -17,7 +17,7 @@
     <a href="/home"><p class="menu texto">De Olho no Condomínio</p></a>
     <div class="navusr">
         <a onclick="logoff()">
-            <h5>{{ nome }}</h5>
+            <h5>{{ usu.nome_completo }}</h5>
             <img class="usr" src="../static/img/6.jpg">
         </a>
     </div>
@@ -27,12 +27,12 @@
     <h3>Gerenciar Perfil</h3>
     <br>
     <img class="usr" src="../static/img/6.jpg">
-    <h4 id="nomeusr">{{ nome }}</h4>
-    <h4 id="ap">{{ endereco }}"</h4>
-    <input id="email" type="email" placeholder="email@email.com" value="{{ email }}" autocomplete="off" readonly>
+    <h4 id="nomeusr">{{ usu.nome_completo }}</h4>
+    <h4 id="ap">{{ usu.endereco }}"</h4>
+    <input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly>
     <br>
     <br>
-    <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ tel }}" autocomplete="off" readonly>
+    <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly>
         <div class="menubottom">
             <div id="opcoes" class="hidden">
                 <div style="position: fixed; bottom: 30px;">
@@ -63,7 +63,7 @@
         </center>
         <br>
         <br>
-        <form action="/formulario" method="POST">
+        <form action="/que" method="POST">
             <div class="input-container">
                 <label for="destinatario">Local / Andar: </label>
                 <input type="text" id="destinatario" name="destinatario" required>
@@ -80,9 +80,10 @@
             </center>
             <br>
             <br>
-            <textarea type="text" id="mensagem" name="mensagem" required></textarea>
+            <textarea type="text" id="mensagem" name="descricao" required></textarea>
             <br>
             <br>
+            <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
             <button id="btnchamado" type="submit">Abrir Reclamação</button>
         </form>
         <br>
