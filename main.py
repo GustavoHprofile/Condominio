@@ -62,6 +62,7 @@ def log():
     documento = coll.find_one(filtro)
     
     if (documento is not None and senha == documento['UsSenha']):
+
         #tipo de usuário
         if(documento['UsTipo'] == '1'):
             usuario = Sindico(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
@@ -142,7 +143,64 @@ def formulario():
 def recuperar():
     return render_template('recuperar.html')
     
+
+#ROTAS DO REPARO =============================================================================================================
+@app.route('/dutos')
+def dutos():
+    if(current_app.config['logado'] != False):
+        Tipochamado = 'Reparo de Dultos'
+        usu = current_app.config['logado'] 
+        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+    else:
+        return render_template('index.html')
     
+@app.route('/ilum')
+def ilum():
+    if(current_app.config['logado'] != False):
+        Tipochamado = 'Reparo na Iluminação'
+        usu = current_app.config['logado'] 
+        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+    else:
+        return render_template('index.html')
+
+@app.route('/limp')
+def limp():
+    if(current_app.config['logado'] != False):
+        Tipochamado = 'Limpeza'
+        usu = current_app.config['logado'] 
+        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+    else:
+        return render_template('index.html')
+
+@app.route('/other')
+def other():
+    if(current_app.config['logado'] != False):
+        Tipochamado = 'Outros'
+        usu = current_app.config['logado'] 
+        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+    else:
+        return render_template('index.html')
+
+@app.route('/via')
+def via():
+    if(current_app.config['logado'] != False):
+        Tipochamado = 'Reparo na via'
+        usu = current_app.config['logado'] 
+        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+    else:
+        return render_template('index.html')
+
+@app.route('/fia')
+def fia():
+    if(current_app.config['logado'] != False):
+        Tipochamado = 'Reparo na Fiação'
+        usu = current_app.config['logado'] 
+        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+    else:
+        return render_template('index.html')
+
+
+#===================================================================================================================
 @app.route('/reparo')
 def reparo():
     if(current_app.config['logado'] != False):
@@ -191,9 +249,10 @@ def noti():
         data = 'hoje'
         situacao = ''
         tipo = 'tubulacao'
+        feedback = ''
         
         
-        solicitar = Notificacao( autor, descricao, local, data, situacao, tipo, dataprevista)
+        solicitar = Notificacao( autor, descricao, local, data, situacao, tipo, feedback, dataprevista)
         solicitar.inserir()
 
         return redirect(url_for('home'))
@@ -211,8 +270,10 @@ def rep():
         data = 'hoje'
         situacao = ''
         tipo = ''
+        feedback = ''
+
         
-        obj = Reparo(autor, descricao, local, data,  situacao, tipo, coordenadas)
+        obj = Reparo(autor, descricao, local, data,  situacao, tipo, feedback, coordenadas)
 
         obj.inserir()
 
@@ -228,13 +289,13 @@ def que():
         descricao = request.form.get('descricao')
         local = request.form.get('local')
         data = request.form.get('data')
-        frequencia = 'Ta faltando no formulário' #modifica no lugar da escrita
-        responsavel = 'Ta faltando tbm Jhow'
+        frequencia = 'freq' #modifica no lugar da escrita
+        responsavel = 'resp'
         situacao = ''
         tipo = 'Queixa'
+        feedback = ''
 
-
-        obj = Queixa(autor, descricao, local, data, situacao, tipo, frequencia, responsavel) 
+        obj = Queixa(autor, descricao, local, data, situacao, tipo, feedback,  frequencia, responsavel) 
 
         obj.inserir()
 
