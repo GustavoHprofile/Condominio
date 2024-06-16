@@ -64,7 +64,15 @@
 			</center>
 			<h4 style="margin: 40px 0px 8px 15px;">Meus Chamados</h4>
 			<div class="chamados">
-				<ul>		
+				<ul>
+					<li style="background-color: gray; color: white;">
+						<div>Nome:</div>
+						<div>Descrição:</div>
+						<div>Unidade:</div>
+						<div>Data:</div>
+						<div>Tipo:</div>
+						<div>Situação:</div>
+					</li>
 					{% for documento in chamados %}
 					<li onclick="location.href('/notificacao')">
 						<div>{{ documento.autor }}</div>
@@ -72,7 +80,7 @@
 						<div>{{ documento.local }}</div>
 						<div>{{ documento.data }}</div>
 						<div>{{ documento.tipo }}</div>
-						<div><input type="checkbox" name="tratativa" disabled {{documento.situacao}}></div></li>
+						<div>{{ documento.situacao }
 					</li>
 					{% endfor %}
 				</ul>
