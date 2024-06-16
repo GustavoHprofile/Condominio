@@ -69,9 +69,11 @@ def log():
             current_app.config['logado'] = usuario
             usu = current_app.config['logado']
 
-            chamados = usu.chamados()
-
-            return render_template('chamados.html', usu = usu, chamados = chamados)
+            if(usu.chamados()):
+                chamados = usu.chamados()
+                return render_template('chamados.html', usu = usu, chamados = chamados)
+            else:
+                return render_template('home.html', usu=usu)    
         else:
             usuario = Morador(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
             current_app.config['logado'] = usuario
@@ -123,10 +125,11 @@ def cadastrar():
 def listar_chamados():
     if current_app.config['logado'] != False:
         usu = current_app.config['logado']
-
         chamados = usu.chamados()
-
-        return render_template('chamados.html', usu = usu, chamados = chamados)
+        if(chamados != 'nenhum'):
+            return render_template('chamados.html', usu = usu, chamados = chamados)
+        else:
+            return render_template('home.html', usu=usu)    
     else:
         return render_template('index.html')
 
@@ -301,6 +304,23 @@ def que():
 
         return redirect(url_for('home'))
     return render_template('home.html', usu = usu)
-        
+
+#SUGESTÃO
+
+@app.route('/sug', methods=['GET', 'POST'])
+def sug():
+    usu = current_app.config['logado']
+    if request.method == 'POST':
+        autor = usu.nome_completo
+        tema = request.form.get('tema')
+        data = request.form.get('data')
+        descri = request.form.get('desc') 
+
+        sugestao = Sugestao(autor, tema, data, descri)
+
+        sugestao.inserir()
+
+        return redirect(url_for('home'))
+      
 if __name__ == '__main__':
     app.run(debug=True)
