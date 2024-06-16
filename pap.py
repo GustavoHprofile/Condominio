@@ -10,7 +10,7 @@ client = MongoClient(url)
 db = client['CondDb']
 coll = db['Cond']
 
-filtro = {'email':'guga@gmail.com'}
+filtro = {'Campo':'Chamado'}
 
-for document in coll.find():
-    print(document)
+coll.delete_many(filtro)
+

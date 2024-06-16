@@ -14,8 +14,19 @@
     <script src="{{ url_for('static',filename='js/js.js') }}"></script>
     <script>
         $(document).ready(function() {
-            var map = L.map('map').setView([-23.1812991, -46.8829011], 20);
-            var marker = null;
+				var coord = "{{ coord }}";
+				var set = "-23.1812991, -46.8829011";
+				var marker = null;
+				
+				if (coord != ""){
+					set = coord;
+					marker = coord;
+				}
+				
+				var latLng = set.split(", ");
+				var lat = parseFloat(latLng[0]);
+				var lon = parseFloat(latLng[1]);
+				var map = L.map('map').setView([lat, lon], 20);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
@@ -45,11 +56,11 @@
 <body>
     <div id="nav">
         <i class="fa fa-bars menu" id="toggleButton"></i>
-        <a href="/home"><p class="menu texto">De Olho no Condomínio</p></a>
+        <a href="{{ url_for('home') }}"><p class="menu texto">De Olho no Condomínio</p></a>
         <div class="navusr">
             <a onclick="logoff()">
-                <h5>{{ nome }}</h5>
-                <img class="usr" src="../static/img/6.jpg">
+                <h5>{{ usu.nome_completo }}</h5>
+                <img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
             </a>
         </div>
     </div>
@@ -57,13 +68,13 @@
         <center>
         <h3>Gerenciar Perfil</h3>
         <br>
-        <img class="usr" src="../static/img/6.jpg">
-        <h4 id="nomeusr">{{ nome }}</h4>
-        <h4 id="ap">{{ endereco }}"</h4>
-        <input id="email" type="email" placeholder="email@email.com" value="{{ email }}" autocomplete="off" readonly>
+        <img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
+        <h4 id="nomeusr">{{ usu.nome_completo }}</h4>
+        <h4 id="ap">Apartamento {{ usu.endereco }}</h4>
+        <input id="email" type="email" placeholder="{{ usu.email }}" autocomplete="off" readonly><a>Editar</a>
         <br>
         <br>
-        <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ tel }}" autocomplete="off" readonly>
+        <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="{{ usu.telefone}}" autocomplete="off" readonly><a>Editar</a>
         <div class="menubottom">
             <div id="opcoes" class="hidden">
                 <div style="position: fixed; bottom: 30px;">
@@ -93,7 +104,7 @@
             <h4 class="titulo">Abrir Chamado</h4>
         </center>
         <br>
-        <form action="/reparo" method="POST">
+        <form action="/rep" method="POST">
             <div class="input-container">
                 <label for="local">Local / Andar: </label>
                 <input id="local" type="text" name="local" required>
@@ -109,8 +120,9 @@
                     <center>
                         <h6>Descrição</h6>
                     </center>
-                    <textarea id="desc" name="mensagem" style="width: 100%; height: 65vh;" required></textarea>
+                    <textarea id="desc" name="descricao" style="width: 100%; height: 65vh;" required></textarea>
                     <br>
+                    <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
                     <div style="float: right;">
                         <button id="btnchamado" type="submit" style="margin: 30px 0px 30px 0px;">Abrir Chamado</button>
                     </div>

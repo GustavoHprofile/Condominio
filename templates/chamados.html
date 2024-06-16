@@ -72,7 +72,7 @@
 						<div>Data:</div>
 						<div>Tipo:</div>
 						<div>Situação:</div>
-					</li>	
+					</li>
 					{% for documento in chamados %}
 					<li onclick="location.href('/notificacao')">
 						<div>{{ documento.autor }}</div>
@@ -80,7 +80,7 @@
 						<div>{{ documento.local }}</div>
 						<div>{{ documento.data }}</div>
 						<div>{{ documento.tipo }}</div>
-						<div>{{ documento.situacao }}></div>
+						<div>{{ documento.situacao }
 					</li>
 					{% endfor %}
 				</ul>
