@@ -75,13 +75,17 @@ class Morador(Usuario):
         documento = []
         
         filtro = {'autor': self.nome_completo}
+        
+        contagem = coll.count_documents(filtro)
 
-        obj = coll.find(filtro)
+        if contagem == 0:
+            documento = 'nenhum'
+        else:
+            obj = coll.find(filtro)
+            for doc  in obj:
+                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'])
 
-        for doc  in obj:
-            chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'])
-
-            documento.append(chamado)
+                documento.append(chamado)
 
         return documento
     
@@ -99,12 +103,16 @@ class Sindico(Usuario):
         
         filtro = {'campo': 'Chamado'}
 
-        obj = coll.find(filtro)
+        contagem = coll.count_documents(filtro)
 
-        for doc  in obj:
-            chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'])
+        if contagem == 0:
+            documento = 'nenhum'
+        else:
+            obj = coll.find(filtro)
+            for doc  in obj:
+                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'])
 
-            documento.append(chamado)
+                documento.append(chamado)
 
         return documento
 
@@ -202,7 +210,7 @@ class Queixa(Chamado):
         coll.insert_one(document)
 
         return
-#Sugestão ======================================================================================================
+#Sugestão  referente a sugestão======================================================================================================
 class Sugestao:
     def __init__(self, autor, tema, data, descricao):
         self.autor = autor
