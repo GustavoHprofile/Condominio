@@ -59,19 +59,21 @@
     </div>
     <div class="corpo">
         <center>
-            <h4 class="titulo">Abrir Chamado</h4>
+            <h4 class="titulo">Abrir Solicitação</h4>
         </center>
         <br>
         <br>
         <form action="/noti" method="POST">
-            <div class="input-container">
-                <label for="destinatario">Local / Andar: </label>
-                <input type="text" id="destinatario" name="local" required>
-            </div>
-            <br>
-            <div class="input-container">
-                <label for="dataprevista">Data prevista: </label>
-                <input type="text" id="dataprevista" name="dataprevista" required>
+            <div class="campos">
+                <div class="input-container">
+                    <label for="destinatario">Unidade (local): </label>
+                    <input type="text" id="destinatario" name="local" required>
+                </div>
+                <br>
+                <div class="input-container">
+                    <label for="dataprevista">Data prevista: </label>
+                    <input type="text" id="dataprevista" name="dataprevista" required>
+                </div>
             </div>
             <br>
             <br>

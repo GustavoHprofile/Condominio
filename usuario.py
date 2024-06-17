@@ -75,13 +75,17 @@ class Morador(Usuario):
         documento = []
         
         filtro = {'autor': self.nome_completo}
+        
+        contagem = coll.count_documents(filtro)
 
-        obj = coll.find(filtro)
+        if contagem == 0:
+            documento = 'nenhum'
+        else:
+            obj = coll.find(filtro)
+            for doc  in obj:
+                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'])
 
-        for doc  in obj:
-            chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'])
-
-            documento.append(chamado)
+                documento.append(chamado)
 
         return documento
     
@@ -99,12 +103,16 @@ class Sindico(Usuario):
         
         filtro = {'campo': 'Chamado'}
 
-        obj = coll.find(filtro)
+        contagem = coll.count_documents(filtro)
 
-        for doc  in obj:
-            chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'])
+        if contagem == 0:
+            documento = 'nenhum'
+        else:
+            obj = coll.find(filtro)
+            for doc  in obj:
+                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'])
 
-            documento.append(chamado)
+                documento.append(chamado)
 
         return documento
 
@@ -122,7 +130,7 @@ class Condominio:
 
 #Chamados ===========================================================================================================
 class Chamado:
-    def __init__(self, autor, descricao, local, data, situacao, tipo):
+    def __init__(self, autor, descricao, local, data, situacao, tipo, feedback):
         self.autor = autor
         self.descricao = descricao
         self.local = local
@@ -130,11 +138,12 @@ class Chamado:
         self.data = data
         self.situacao = situacao
         self.tipo = tipo
+        self.feedback = feedback
     
 #Notificação referênte a solicitar
 class Notificacao(Chamado):
-    def __init__(self, autor, descricao, local,  data, situacao, tipo, dataprevista):
-        super().__init__(autor, descricao, local, data, situacao, tipo)
+    def __init__(self, autor, descricao, local,  data, situacao, tipo, feedback, dataprevista):
+        super().__init__(autor, descricao, local, data, situacao, tipo, feedback)
         self.dataprevista = dataprevista
         self.tipo = 'Notificacao'
 
@@ -147,6 +156,7 @@ class Notificacao(Chamado):
             'data': self.data,
             'situacao': self.situacao,
             'tipo':self.tipo,
+            'feedback':self.feedback,
             'datapre': self.dataprevista
         }
 
@@ -155,8 +165,8 @@ class Notificacao(Chamado):
 
 #Reparo referente a reparo
 class Reparo(Chamado):
-    def __init__(self, autor, descricao, local, data,  situacao, tipo, coordenadas):
-        super().__init__(autor, descricao, local, data, situacao, tipo)
+    def __init__(self, autor, descricao, local, data,  situacao, tipo, feedback, coordenadas):
+        super().__init__(autor, descricao, local, data, situacao, tipo, feedback)
         self.cord = coordenadas
         self.tipo = 'Reparo'
     
@@ -169,6 +179,7 @@ class Reparo(Chamado):
             'data': self.data,
             'situacao': self.situacao,
             'tipo': self.tipo,
+            'feedback':self.feedback,
             'coordenadas': self.cord
         }
 
@@ -177,8 +188,8 @@ class Reparo(Chamado):
         return
 #Queixa referente a formulario
 class Queixa(Chamado):
-    def __init__(self, autor, descricao, local, data, situacao, tipo, frequencia, responsavel):
-        super().__init__(autor, descricao, local, data, situacao, tipo)
+    def __init__(self, autor, descricao, local, data, situacao, tipo, frequencia, feedback, responsavel):
+        super().__init__(autor, descricao, local, data, situacao, tipo, feedback)
         self.responsavel = responsavel
         self.frequencia = frequencia
 
@@ -191,6 +202,7 @@ class Queixa(Chamado):
             'data': self.data,
             'situacao': self.situacao,
             'tipo': self.tipo,
+            'feedback':self.feedback,
             'responsavel': self.responsavel,
             'frequencia' : self.frequencia
         }
@@ -198,7 +210,7 @@ class Queixa(Chamado):
         coll.insert_one(document)
 
         return
-#Sugestão ======================================================================================================
+#Sugestão  referente a sugestão======================================================================================================
 class Sugestao:
     def __init__(self, autor, tema, data, descricao):
         self.autor = autor

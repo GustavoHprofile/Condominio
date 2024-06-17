@@ -101,13 +101,15 @@
     </div>
     <div class="corpo">
         <center>
-            <h4 class="titulo">Abrir Chamado</h4>
+            <h4 class="titulo">Abrir Chamado - {{ Tipochamado }}</h4>
         </center>
         <br>
         <form action="/rep" method="POST">
-            <div class="input-container">
-                <label for="local">Local / Andar: </label>
-                <input id="local" type="text" name="local" value="{{ local }}" required>
+            <div class="campos">
+                <div class="input-container">
+                    <label for="local">Unidade (local): </label>
+                    <input id="local" type="text" name="local" value="{{ local }}" required>
+                </div>
             </div>
             <div style="margin-bottom: 20px;">
                 <div style="float: left; width: 48%;">
