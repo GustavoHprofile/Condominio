@@ -67,12 +67,12 @@
             <div class="campos">
                 <div class="input-container">
                     <label for="destinatario">Unidade (local): </label>
-                    <input type="text" id="destinatario" name="local" required>
+                    <input type="text" id="destinatario" name="local" value="{{ local }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="dataprevista">Data prevista: </label>
-                    <input type="text" id="dataprevista" name="dataprevista" required>
+                    <input type="text" id="dataprevista" name="dataprevista" value="{{ dataprevista }}" required>
                 </div>
             </div>
             <br>
@@ -82,15 +82,17 @@
             </center>
             <br>
             <br>
-            <textarea type="text" id="mensagem" name="descricao" required></textarea>
+            <textarea type="text" id="mensagem" name="descricao" value="{{ descricao }}" required></textarea>
             <br>
             <input type="text" name="autor"   style="display: none;" value="{{usu.nome_completo}}">
             <br>
             <button id="btnchamado" type="submit">Abrir Chamado</button>
         </form>
         <br>
+
         <!-- Chama o bloco do feedback -->
         {{ feedback }}
+
     </div>
 </body>
 </html>

@@ -65,22 +65,22 @@
             <div class="campos">
                 <div class="input-container">
                     <label for="destinatario">Unidade (local): </label>
-                    <input type="text" id="destinatario" name="local" required>
+                    <input type="text" id="destinatario" name="destinatario" value="{{ local }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="dataprevista">Periodo Ocorrido: </label>
-                    <input type="text" id="dataprevista" name="dataprevista" required>
+                    <input type="text" id="dataprevista" name="dataprevista" value="{{ data }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="freq">Frequência: </label>
-                    <input type="text" id="freq" name="destinatario" required>
+                    <input type="text" id="freq" name="destinatario" value="{{ frequencia }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="resp">Responsável: </label>
-                    <input type="text" id="resp" name="dataprevista" required>
+                    <input type="text" id="resp" name="dataprevista" value="{{ responsavel }}" required>
                 </div>
             </div>
             <br>
@@ -88,16 +88,23 @@
                 <label for="mensagem">Descrição</label>
             </center>
             <br>
-            <textarea type="text" id="mensagem" name="descricao" required></textarea>
+            <br>
+            <textarea type="text" id="mensagem" name="descricao" value="{{ descricao }}" required></textarea>
             <br>
             <br>
             <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
-            <button id="btnchamado" type="submit">Abrir Reclamação</button>
-        <br>
-        <br>
+
+            <!-- ocultar quando houver feedback -->
+            <div>
+                <button id="btnchamado" type="submit">Abrir Reclamação</button>
+            </div>
+
         </form>
+        <br>
+
         <!-- Chama o bloco do feedback -->
         {{ feedback }}
+
     </div>
 </body>
 </html>
