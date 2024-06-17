@@ -228,8 +228,8 @@ def que():
         descricao = request.form.get('descricao')
         local = request.form.get('local')
         data = request.form.get('data')
-        frequencia = 'Ta faltando no formulário' #modifica no lugar da escrita
-        responsavel = 'Ta faltando tbm Jhow'
+        frequencia = request.form.get('freq')
+        responsavel = request.form.get('resp')
         situacao = ''
         tipo = 'Queixa'
 
