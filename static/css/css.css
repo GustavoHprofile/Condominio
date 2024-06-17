@@ -11,7 +11,7 @@
 
 #barralateral.show { left: 0; }
 
-#btnchamado {
+#btnchamado, #btnfeedback {
 	color: white;
 	border-radius: 8px;
 	background-color: #265CFF;

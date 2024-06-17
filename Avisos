@@ -1,0 +1,39 @@
+O botão de tratar chamado não aparece ✓
+Fazer a tela para responder o chamado ✓
+atualizar a documentação e fazer o alterar senha --
+impedir que o sindico possa voltar pra home --
+
+
+variável python que deve ser repassada para as páginas para o síndico fazer o feedback:
+
+feedback = "<div><form><br><center><label for='mensagem'>Feedback</label></center><br><textarea type='text' id='feedback' name='feedback' required></textarea><br><br><button id='btnfeedback' type='submit'>Enviar Feedback</button><br><br></form></div>"
+
+
+variável python que deve ser repassada para as páginas para o morador visualizar feedback do síndico:
+
+feedback = "<div><form><br><center><label for='mensagem'>Feedback</label></center><br><textarea type='text' id='feedback' name='feedback' value="{{ feedback }}" disabled></textarea><br><br></form></div>"
+
+
+campos carregados com o feedback:
+
+#NOTIFICAÇÕES (solicitar.html)
+descricao
+local
+dataprevista
+
+#REPARO (reparo.html)
+descricao
+local
+coordenadas
+
+#QUEIXA (formulario.html)
+descricao
+local
+data
+frequencia
+responsavel
+
+#SUGESTÃO (sugestao.html)
+tema
+data
+descri
