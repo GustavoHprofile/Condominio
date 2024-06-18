@@ -75,36 +75,81 @@
                 <br>
                 <div class="input-container">
                     <label for="freq">Frequência: </label>
-                    <input type="text" id="freq" name="destinatario" value="{{ frequencia }}" required>
+                    <input type="text" id="freq" name="freq" value="{{ frequencia }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="resp">Responsável: </label>
-                    <input type="text" id="resp" name="dataprevista" value="{{ responsavel }}" required>
+                    <input type="text" id="resp" name="resp" value="{{ responsavel }}" required>
                 </div>
             </div>
             <br>
             <center>
-                <label for="mensagem">Descrição</label>
+                <label for="desc">Descrição</label>
             </center>
             <br>
             <br>
-            <textarea type="text" id="mensagem" name="descricao" value="{{ descricao }}" required></textarea>
+            <textarea type="text" id="desc" name="descricao" required>{{ descricao }}</textarea>
             <br>
             <br>
             <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
-
-            <!-- ocultar quando houver feedback -->
-            <div>
+            <div id="divbtncham">
                 <button id="btnchamado" type="submit">Abrir Reclamação</button>
             </div>
-
         </form>
         <br>
+        <div id="feed" style="display: none;">
+            <br>
+            <br>
+            <form id="fd" style="width: 100%;" action="/feed" method="POST">
+                <center>
+                    <label for="feedback">Feedback</label>
+                </center>
+                <br>
+                <textarea type="text" id="feedback" name='feedback'required>{{ feedback }}</textarea>
+                <br>
+                <br>
+                <div id="divbtntrat" style="display: none;">
+                    <button id='btnfeedback' type='submit'>Enviar Feedback</button>
+                    <br>
+                    <br>
+                </div>
+            </form>
+        </div>
+        <script>
+            function adm() {
+                const feed = document.getElementById("feed");
+                const tratar = document.getElementById("divbtntrat");
+                const cham =  document.getElementById("divbtncham");
+                var fdbk = document.getElementById("feedback").textContent;
+                var UsTipo = "{{ UsTipo }}";
 
-        <!-- Chama o bloco do feedback -->
-        {{ feedback }}
+                if (UsTipo == '1'){
+                    feed.style.display = "block";
+                    document.getElementById('desc').readOnly = true;
+                    document.getElementById('local').readOnly = true;
+                    document.getElementById('dataprevista').readOnly = true;
+                        document.getElementById('freq').readOnly = true;
+                        document.getElementById('resp').readOnly = true;
+                    if (fdbk == null || fdbk == ''){
+                        tratar.style.display = "block";
+                    }
+                }else{
+                    if (fdbk == null || fdbk == ''){
+                        cham.style.display = "block";
+                    }else{
+                        feed.style.display = "block";
+                        document.getElementById('desc').readOnly = true;
+                        document.getElementById('local').readOnly = true;
+                        document.getElementById('dataprevista').readOnly = true;
+                        document.getElementById('freq').readOnly = true;
+                        document.getElementById('resp').readOnly = true;
+                    }
+                }
+            }
 
+            window.onload = adm;
+        </script>
     </div>
 </body>
 </html>

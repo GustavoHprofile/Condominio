@@ -1,0 +1,7 @@
+Python
+Pymongo
+Flask
+NodeJs
+Certifi
+
+Obs. É necessário executar o arquivo nodejs.cmd para rodar o servidor de data em NodeJs, caso contrário um erro é exibido ao inspecionar as páginas de reparo.
