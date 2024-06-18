@@ -85,11 +85,11 @@
             </div>
             <br>
             <center>
-                <label for="mensagem">Descrição</label>
+                <label for="desc">Descrição</label>
             </center>
             <br>
             <br>
-            <textarea type="text" id="mensagem" name="descricao" value="{{ descricao }}" required></textarea>
+            <textarea type="text" id="desc" name="descricao" required>{{ descricao }}</textarea>
             <br>
             <br>
             <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
@@ -98,14 +98,15 @@
             </div>
         </form>
         <br>
-        <div id="feed">
-            <form>
-                <br>
+        <div id="feed" style="display: none;">
+            <br>
+            <br>
+            <form id="fd" style="width: 100%;" action="/feed" method="POST">
                 <center>
-                    <label for="mensagem">Feedback</label>
+                    <label for="feedback">Feedback</label>
                 </center>
                 <br>
-                <textarea type="text" id="feedback" name='feedback' required></textarea>
+                <textarea type="text" id="feedback" name='feedback'required>{{ feedback }}</textarea>
                 <br>
                 <br>
                 <div id="divbtntrat" style="display: none;">
@@ -116,36 +117,38 @@
             </form>
         </div>
         <script>
-            function adm(){
+            function adm() {
+                const feed = document.getElementById("feed");
+                const tratar = document.getElementById("divbtntrat");
+                const cham =  document.getElementById("divbtncham");
+                var fdbk = document.getElementById("feedback").textContent;
                 var UsTipo = "{{ UsTipo }}";
-                var fdbk = "{{ feedback }}";
-                var feed = document.getElementById("feed");
-                var tratar = document.getElementById("divbtntrat");
-                var cham =  document.getElementById("divbtncham");
 
                 if (UsTipo == '1'){
                     feed.style.display = "block";
-                    if (fdbk != ""){
+                    document.getElementById('desc').readOnly = true;
+                    document.getElementById('local').readOnly = true;
+                    document.getElementById('dataprevista').readOnly = true;
+                        document.getElementById('freq').readOnly = true;
+                        document.getElementById('resp').readOnly = true;
+                    if (fdbk == null || fdbk == ''){
                         tratar.style.display = "block";
-                        document.getElementById('descricao').disabled = true;
-                        document.getElementById('local').disabled = true;
-                        document.getElementById('dataprevista').disabled = true;
-                        document.getElementById('freq').disabled = true;
-                        document.getElementById('resp').disabled = true;
                     }
                 }else{
-                    if (fdbk != ""){
-                        feed.style.display = "block";
-                        document.getElementById('descricao').disabled = true;
-                        document.getElementById('local').disabled = true;
-                        document.getElementById('dataprevista').disabled = true;
-                        document.getElementById('freq').disabled = true;
-                        document.getElementById('resp').disabled = true;
-                    }else{
+                    if (fdbk == null || fdbk == ''){
                         cham.style.display = "block";
+                    }else{
+                        feed.style.display = "block";
+                        document.getElementById('desc').readOnly = true;
+                        document.getElementById('local').readOnly = true;
+                        document.getElementById('dataprevista').readOnly = true;
+                        document.getElementById('freq').readOnly = true;
+                        document.getElementById('resp').readOnly = true;
                     }
                 }
             }
+
+            window.onload = adm;
         </script>
     </div>
 </body>

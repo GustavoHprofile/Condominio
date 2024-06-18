@@ -104,61 +104,64 @@
             <h4 class="titulo">Abrir Chamado - {{ Tipochamado }}</h4>
         </center>
         <br>
-        <form action="/rep" method="POST">
-            <div class="campos">
-                <div class="input-container">
-                    <label for="local">Unidade (local): </label>
-                    <input id="local" type="text" name="local" value="{{ local }}" required>
-                </div>
-            </div>
-            <div style="margin-bottom: 20px;">
-                <div style="float: left; width: 48%;">
-                    <center>
-                        <h6>Mapa</h6>
-                    </center>
-                    <div id="map" style="height: 65vh; width: 100%; border: solid 1px gray; border-radius: 8px;"></div>
-                </div>
-                <div style="float: right; width: 48%;">
-                    <center>
-                        <h6>Descrição</h6>
-                    </center>
-                    <textarea id="desc" name="descricao" style="width: 100%; height: 65vh;" value="{{ descricao }}" required></textarea>
-                    <br>
-                    <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
-                    <div id="divbtncham" style="float: right; display: none;">
-                        <button id="btnchamado" type="submit" style="margin: 30px 0px 30px 0px;">Abrir Chamado</button>
+        <div>
+            <form id="pg" action="/rep" method="POST">
+                <div class="campos">
+                    <div class="input-container">
+                        <label for="local">Unidade (local): </label>
+                        <input id="local" type="text" name="local" value="{{ local }}" required>
                     </div>
                 </div>
-            </div>
-            <div style="display: none;">
-                <label for="coordenadas">Coordenadas:</label>
-                <input type="text" id="coordenadas" name="coordenadas" style="width: 85%;" readonly>
-                <input type="text" id="data" name="data" style="width: 85%;" readonly>
-                <script>
-                    // Função para obter a data formatada do servidor Node.js
-                    async function fetchDate() {
-                        try {
-                            const response = await fetch('http://localhost:3000/get-date');
-                            const data = await response.json();
-                            document.getElementById('data').value = data.date;
-                        } catch (error) {
-                            console.error('Erro ao obter a data:', error);
+                <div style="margin-bottom: 20px;">
+                    <div style="float: left; width: 48%;">
+                        <center>
+                            <h6>Mapa</h6>
+                        </center>
+                        <div id="map" style="height: 65vh; width: 100%; border: solid 1px gray; border-radius: 8px;"></div>
+                    </div>
+                    <div style="float: right; width: 48%;">
+                        <center>
+                            <h6>Descrição</h6>
+                        </center>
+                        <textarea id="desc" name="descricao" style="width: 100%; height: 65vh;" value="{{ descricao }}" required></textarea>
+                        <br>
+                        <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
+                        <div id="divbtncham" style="float: right; display: none;">
+                            <button id="btnchamado" type="submit" style="margin: 30px 0px 30px 0px;">Abrir Chamado</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: none;">
+                    <label for="coordenadas">Coordenadas:</label>
+                    <input type="text" id="coordenadas" name="coordenadas" style="width: 85%;" readonly>
+                    <input type="text" id="data" name="data" style="width: 85%;" readonly>
+                    <script>
+                        // Função para obter a data formatada do servidor Node.js
+                        async function fetchDate() {
+                            try {
+                                const response = await fetch('http://localhost:3000/get-date');
+                                const data = await response.json();
+                                document.getElementById('data').value = data.date;
+                            } catch (error) {
+                                console.error('Erro ao obter a data:', error);
+                            }
                         }
-                    }
-                    // Chama a função ao carregar a página
-                    window.onload = fetchDate;
-                </script>
-            </div>
-            <br>
-        </form>
-        <div id="feed">
-            <form>
+                        // Chama a função ao carregar a página
+                        window.onload = fetchDate;
+                    </script>
+                </div>
                 <br>
+            </form>
+        </div>
+        <div id="feed" style="display: none;">
+            <br>
+            <br>
+            <form id="fd" style="width: 100%;" action="/feed" method="POST">
                 <center>
-                    <label for="mensagem">Feedback</label>
+                    <label for="feedback">Feedback</label>
                 </center>
                 <br>
-                <textarea type="text" id="feedback" name='feedback' required></textarea>
+                <textarea type="text" id="feedback" name='feedback'required>{{ feedback }}</textarea>
                 <br>
                 <br>
                 <div id="divbtntrat" style="display: none;">
@@ -169,30 +172,32 @@
             </form>
         </div>
         <script>
-            function adm(){
+            function adm() {
+                const feed = document.getElementById("feed");
+                const tratar = document.getElementById("divbtntrat");
+                const cham =  document.getElementById("divbtncham");
+                var fdbk = document.getElementById("feedback").textContent;
                 var UsTipo = "{{ UsTipo }}";
-                var fdbk = "{{ feedback }}";
-                var feed = document.getElementById("feed");
-                var tratar = document.getElementById("divbtntrat");
-                var cham =  document.getElementById("divbtncham");
 
                 if (UsTipo == '1'){
                     feed.style.display = "block";
-                    if (fdbk != ""){
+                    document.getElementById('desc').readOnly = true;
+                    document.getElementById('local').readOnly = true;
+                    if (fdbk == null || fdbk == ''){
                         tratar.style.display = "block";
-                        document.getElementById('descricao').disabled = true;
-                        document.getElementById('local').disabled = true;
                     }
                 }else{
-                    if (fdbk != ""){
-                        feed.style.display = "block";
-                        document.getElementById('descricao').disabled = true;
-                        document.getElementById('local').disabled = true;
-                    }else{
+                    if (fdbk == null || fdbk == ''){
                         cham.style.display = "block";
+                    }else{
+                        feed.style.display = "block";
+                        document.getElementById('desc').readOnly = true;
+                        document.getElementById('local').readOnly = true;
                     }
                 }
             }
+
+            window.onload = adm;
         </script>
     </div>
 </body>

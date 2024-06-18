@@ -4,7 +4,6 @@ from pymongo import MongoClient, errors
 import certifi
 from datetime import datetime
 
-
 # Conexão com o MongoDB
 user = "gustavoprofile762"
 senha = "p2rraSit3"
@@ -138,7 +137,7 @@ def listar_chamados():
 def formulario():
     if(current_app.config['logado'] != False):
         usu = current_app.config['logado']
-        return render_template('formulario.html',usu = usu)
+        return render_template('formulario.html', usu = usu)
     else:
         return render_template('index.html')
     
@@ -153,7 +152,7 @@ def dutos():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo de Dultos'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
     else:
         return render_template('index.html')
     
@@ -162,7 +161,7 @@ def ilum():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo na Iluminação'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
     else:
         return render_template('index.html')
 
@@ -171,7 +170,7 @@ def limp():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Limpeza'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
     else:
         return render_template('index.html')
 
@@ -180,7 +179,7 @@ def other():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Outros'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
     else:
         return render_template('index.html')
 
@@ -189,7 +188,7 @@ def via():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo na via'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
     else:
         return render_template('index.html')
 
@@ -198,7 +197,7 @@ def fia():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo na Fiação'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado=Tipochamado)
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
     else:
         return render_template('index.html')
 
@@ -233,7 +232,7 @@ def solicitar():
 @app.route('/excluir.html')
 def excluir():
     if(current_app.config['logado'] != False):
-        return render_template('excluir.html', nome=current_app.config['logado']['UsNom'], email=current_app.config['logado']['UsEma'], endereco=current_app.config['logado']['UsEndereco'], tel=current_app.config['logado']['UsTelefone'])
+        return render_template('excluir.html', nome = current_app.config['logado']['UsNom'], email = current_app.config['logado']['UsEma'], endereco = current_app.config['logado']['UsEndereco'], tel = current_app.config['logado']['UsTelefone'])
     else:
         return render_template('index.html')
 
