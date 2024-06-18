@@ -3,6 +3,7 @@ from usuario import Morador, Notificacao, Reparo, Sugestao, Sindico, Queixa
 from pymongo import MongoClient, errors
 import certifi
 from datetime import datetime
+from bson.objectid import ObjectId
 
 # Conexão com o MongoDB
 user = "gustavoprofile762"
@@ -64,7 +65,8 @@ def log():
 
         #tipo de usuário
         if(documento['UsTipo'] == '1'):
-            usuario = Sindico(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
+            usuario = Sindico(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['_id'], documento['UsEndereco'])
+
             current_app.config['logado'] = usuario
             usu = current_app.config['logado']
 
@@ -74,7 +76,7 @@ def log():
             else:
                 return render_template('home.html', usu=usu)    
         else:
-            usuario = Morador(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['UsEndereco'])
+            usuario = Morador(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['_id'], documento['UsEndereco'])
             current_app.config['logado'] = usuario
             return render_template('home.html', usu = usuario)
     else:
@@ -94,7 +96,8 @@ def home():
         return render_template('home.html',usu = usu)
     else:
         return render_template('index.html')
-    
+
+ 
 # Rota para cadastrar um novo usuário
 @app.route('/cadastrar', methods=['GET', 'POST'])
 def cadastrar():
@@ -105,20 +108,15 @@ def cadastrar():
         senha = request.form.get('senha')
         telefone = request.form.get('telefone')
         endereco = request.form.get('endereco')
+        idU = ''
 
-        usuario = Morador(
-            nome_completo,
-            documento,
-            email,
-            senha,
-            telefone,
-            endereco
-        )
+        usuario = Morador(nome_completo, documento, email, senha, telefone, idU, endereco)
 
         cad = usuario.cadastrar()
 
         return redirect(url_for('home'))
     return render_template('cadastrar.html')
+
 
 @app.route('/chamados')
 def listar_chamados():
@@ -137,7 +135,8 @@ def listar_chamados():
 def formulario():
     if(current_app.config['logado'] != False):
         usu = current_app.config['logado']
-        return render_template('formulario.html', usu = usu)
+        chamado = ''
+        return render_template('formulario.html', usu = usu, chamado = chamado)
     else:
         return render_template('index.html')
     
@@ -152,7 +151,8 @@ def dutos():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo de Dultos'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
+        chamado = ''
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado, chamado = chamado)
     else:
         return render_template('index.html')
     
@@ -161,7 +161,8 @@ def ilum():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo na Iluminação'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
+        chamado = ''
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado, chamado = chamado)
     else:
         return render_template('index.html')
 
@@ -170,7 +171,8 @@ def limp():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Limpeza'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
+        chamado = ''
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado, chamado = chamado)
     else:
         return render_template('index.html')
 
@@ -179,7 +181,8 @@ def other():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Outros'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
+        chamado = ''
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado, chamado = chamado)
     else:
         return render_template('index.html')
 
@@ -188,7 +191,8 @@ def via():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo na via'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
+        chamado = ''
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado, chamado = chamado)
     else:
         return render_template('index.html')
 
@@ -197,7 +201,8 @@ def fia():
     if(current_app.config['logado'] != False):
         Tipochamado = 'Reparo na Fiação'
         usu = current_app.config['logado'] 
-        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado)
+        chamado = ''
+        return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado, chamado = chamado)
     else:
         return render_template('index.html')
 
@@ -207,7 +212,8 @@ def fia():
 def reparo():
     if(current_app.config['logado'] != False):
         usu = current_app.config['logado'] 
-        return render_template('reparo.html',usu = usu)
+        chamado = ''
+        return render_template('reparo.html',usu = usu, chamado = chamado)
     else:
         return render_template('index.html')
     
@@ -215,17 +221,18 @@ def reparo():
 def sugestao():
     if(current_app.config['logado'] != False):
         usu = current_app.config['logado']
-
-        return render_template('sugestao.html', usu = usu)
+        chamado = ''
+        return render_template('sugestao.html', usu = usu, chamado = chamado)
     else:
         return render_template('index.html')
 
+#NOTIFICAÇÃO
 @app.route('/solicitar')
 def solicitar():
     if(current_app.config['logado'] != False):
         usu = current_app.config['logado']
-
-        return render_template('solicitar.html', usu = usu)
+        chamado = ''
+        return render_template('solicitar.html', usu = usu, chamado = chamado)
     else:
         return render_template('index.html')
 
@@ -249,12 +256,12 @@ def noti():
         dataprevista = request.form.get('dataprevista')
         autor = request.form.get('autor')
         data = 'hoje'
-        situacao = ''
+        situacao = 'Não Tratado'
         tipo = 'tubulacao'
         feedback = ''
+        idC = ''
         
-        
-        solicitar = Notificacao( autor, descricao, local, data, situacao, tipo, feedback, dataprevista)
+        solicitar = Notificacao( autor, descricao, local, data, situacao, tipo, feedback, idC, dataprevista)
         solicitar.inserir()
 
         return redirect(url_for('home'))
@@ -270,12 +277,13 @@ def rep():
         local = request.form.get('local')
         coordenadas = request.form.get('coordenadas')
         data = 'hoje'
-        situacao = ''
+        situacao = 'Não Tratado'
         tipo = ''
         feedback = ''
+        idC = ''
 
         
-        obj = Reparo(autor, descricao, local, data,  situacao, tipo, feedback, coordenadas)
+        obj = Reparo(autor, descricao, local, data,  situacao, tipo, feedback, idC, coordenadas)
 
         obj.inserir()
 
@@ -293,11 +301,12 @@ def que():
         data = request.form.get('data')
         frequencia = request.form.get('freq')
         responsavel = request.form.get('resp')
-        situacao = ''
+        situacao = 'Não Tratado'
         tipo = 'Queixa'
         feedback = ''
+        idC = ''
 
-        obj = Queixa(autor, descricao, local, data, situacao, tipo, feedback,  frequencia, responsavel) 
+        obj = Queixa(autor, descricao, local, data, situacao, tipo, feedback, idC,  frequencia, responsavel) 
 
         obj.inserir()
 
@@ -314,12 +323,70 @@ def sug():
         tema = request.form.get('tema')
         data = request.form.get('data')
         descri = request.form.get('desc') 
-
-        sugestao = Sugestao(autor, tema, data, descri)
+        idG = ''
+        sugestao = Sugestao(autor, tema, data, descri, idG)
 
         sugestao.inserir()
 
         return redirect(url_for('home'))
-      
+    
+#TRATAR/EDITAR===============================================================================================================================
+@app.route('/Notificacao')
+def notificacao():
+    idC = request.args.get('var')
+    doc = ObjectId(idC)
+    filtro = {'_id':doc}
+    documento = coll.find_one(filtro)
+
+    chamado = Notificacao(documento['autor'], documento['descricao'], documento['local'],documento['data'], documento['situacao'], documento['tipo'], documento['feedback'], documento['_id'], documento['datapre'])
+    usu = current_app.config['logado']
+    return render_template('solicitar.html', usu = usu, chamado = chamado)
+
+@app.route('/Queixa')
+def Que():
+    idC = request.args.get('var')
+    doc = ObjectId(idC)
+    filtro = {'_id':doc}
+    documento = coll.find_one(filtro)
+
+    chamado = Queixa(documento['autor'], documento['descricao'], documento['local'], documento['data'], documento['situacao'], documento['tipo'], documento['feedback'], documento['_id'],  documento['frequencia'], documento['responsavel']) 
+    usu = current_app.config['logado']
+    return render_template('formulario.html', usu = usu, chamado = chamado)
+
+@app.route('/Reparo')
+def Repair():
+    idC = request.args.get('var')
+    doc = ObjectId(idC)
+    filtro = {'_id':doc}
+    documento = coll.find_one(filtro)
+
+    chamado = Reparo(documento['autor'], documento['descricao'], documento['local'], documento['data'], documento['situacao'], documento['tipo'], documento['feedback'], documento['_id'], documento['coordenadas']) 
+                                                    
+    usu = current_app.config['logado']
+    return render_template('reparo.html', usu = usu, chamado = chamado)
+
+#TRATAMENTO 
+@app.route('/feed', methods=['GET', 'POST'])
+def feed():
+    if request.method == 'POST':
+        idC = request.form.get('idC')
+        feed = request.form.get('feedback')
+        situ = request.form.get('situ')
+
+        modifica = {
+            "$set": {
+                'feedback': feed,
+                'situacao': situ
+            }
+        }
+
+        identificacao = ObjectId(idC)
+
+        filtro = {'_id': identificacao}
+
+        mod = coll.update_one(filtro, modifica)
+    usu = current_app.config['logado']
+    chamados = usu.chamados()
+    return render_template('chamados.html', usu = usu, chamados = chamados)
 if __name__ == '__main__':
     app.run(debug=True)

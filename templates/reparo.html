@@ -14,7 +14,7 @@
     <script src="{{ url_for('static',filename='js/js.js') }}"></script>
     <script>
         $(document).ready(function() {
-				var coord = "{{ coordenadas }}";
+				var coord = "{{ chamado.cord }}";
 				var set = "-23.1812991, -46.8829011";
 				var marker = null;
 				
@@ -41,12 +41,12 @@
                         draggable: true
                     }).addTo(map);
                 }
-                $('#coordenadas').val("https://www.google.com/maps/place/" + e.latlng.lat + "," + e.latlng.lng + "/@" + e.latlng.lat + "," + e.latlng.lng + "," + map.getZoom() + "z");
+                $('#coordenadas').val(e.latlng.lat + ", " + e.latlng.lng);
             }
             map.on('click', onMapClick);
 
             function onZoomChange(e) {
-                $('#coordenadas').val("https://www.google.com/maps/place/" + map.getCenter().lat + "," + map.getCenter().lng + "/@" + map.getCenter().lat + "," + map.getCenter().lng + "," + map.getZoom() + "z");
+                $('#coordenadas').val( map.getCenter().lat + ", " + map.getCenter().lng);
             }
             map.on('zoomend', onZoomChange);
             onZoomChange();
@@ -109,7 +109,7 @@
                 <div class="campos">
                     <div class="input-container">
                         <label for="local">Unidade (local): </label>
-                        <input id="local" type="text" name="local" value="{{ local }}" required>
+                        <input id="local" type="text" name="local" value="{{ chamado.local }}" required>
                     </div>
                 </div>
                 <div style="margin-bottom: 20px;">
@@ -123,7 +123,7 @@
                         <center>
                             <h6>Descrição</h6>
                         </center>
-                        <textarea id="desc" name="descricao" style="width: 100%; height: 65vh;" value="{{ descricao }}" required></textarea>
+                        <textarea id="desc" name="descricao" style="width: 100%; height: 65vh;"  required>{{ chamado.descricao }}</textarea>
                         <br>
                         <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
                         <div id="divbtncham" style="float: right; display: none;">
@@ -161,8 +161,10 @@
                     <label for="feedback">Feedback</label>
                 </center>
                 <br>
-                <textarea type="text" id="feedback" name='feedback'required>{{ feedback }}</textarea>
+                <textarea type="text" id="feedback" name='feedback'required>{{ chamado.feedback }}</textarea>
                 <br>
+                <input type="text" name="idC" value="{{chamado.id}}" style="display: none;">
+                <input type="text" name="situ" value="Tratado" style="display: none;">
                 <br>
                 <div id="divbtntrat" style="display: none;">
                     <button id='btnfeedback' type='submit'>Enviar Feedback</button>
@@ -177,7 +179,7 @@
                 const tratar = document.getElementById("divbtntrat");
                 const cham =  document.getElementById("divbtncham");
                 var fdbk = document.getElementById("feedback").textContent;
-                var UsTipo = "{{ UsTipo }}";
+                var UsTipo = "{{ usu.tipo }}";
 
                 if (UsTipo == '1'){
                     feed.style.display = "block";

@@ -49,7 +49,7 @@
         </center>
         <br>
         <br>
-        <form action="/sugestao" method="POST">
+        <form action="/sug" method="POST">
             <div class="campos">
                 <div class="input-container">
                     <label for="destinatario">Tema: </label>
@@ -101,7 +101,7 @@
             const tratar = document.getElementById("divbtntrat");
             const cham =  document.getElementById("divbtncham");
             var fdbk = document.getElementById("feedback").textContent;
-            var UsTipo = "{{ UsTipo }}";
+            var UsTipo = "{{ usu.tipo }}";
 
             if (UsTipo == '1'){
                 feed.style.display = "block";
