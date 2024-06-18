@@ -53,7 +53,7 @@
             <div class="campos">
                 <div class="input-container">
                     <label for="destinatario">Tema: </label>
-                    <input type="text" id="destinatario" name="tema" value="{{ tema }}" required>
+                    <input type="text" id="tema" name="tema" value="{{ tema }}" required>
                 </div>
                 <br>
                 <div class="input-container">
@@ -71,13 +71,56 @@
             <textarea type="text" id="mensagem" name="desc" value="{{ descri }}" required></textarea>
             <br>
             <br>
-            <button id="btnchamado" type="submit">Abrir Sugestão</button>
+            <div id="divbtncham" style="display: none;">
+                <button id="btnchamado" type="submit">Abrir Sugestão</button>
+            </div>
         </form>
         <br>
     </div>
+    <div id="feed">
+        <form>
+            <br>
+            <center>
+                <label for="mensagem">Feedback</label>
+            </center>
+            <br>
+            <textarea type="text" id="feedback" name='feedback' required></textarea>
+            <br>
+            <br>
+            <div id="divbtntrat" style="display: none;">
+                <button id='btnfeedback' type='submit'>Enviar Feedback</button>
+                <br>
+                <br>
+            </div>
+        </form>
+    </div>
+    <script>
+        function adm(){
+            var UsTipo = "{{ UsTipo }}";
+            var fdbk = "{{ feedback }}";
+            var feed = document.getElementById("feed");
+            var tratar = document.getElementById("divbtntrat");
+            var cham =  document.getElementById("divbtncham");
 
-    <!-- Chama o bloco do feedback -->
-    {{ feedback }}
-
+            if (UsTipo == '1'){
+                feed.style.display = "block";
+                if (fdbk != ""){
+                    tratar.style.display = "block";
+                    document.getElementById('descricao').disabled = true;
+                    document.getElementById('tema').disabled = true;
+                    document.getElementById('data').disabled = true;
+                }
+            }else{
+                if (fdbk != ""){
+                    feed.style.display = "block";
+                    document.getElementById('descricao').disabled = true;
+                    document.getElementById('tema').disabled = true;
+                    document.getElementById('data').disabled = true;
+                }else{
+                    cham.style.display = "block";
+                }
+            }
+        }
+    </script>
 </body>
 </html>

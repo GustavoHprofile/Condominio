@@ -86,13 +86,56 @@
             <br>
             <input type="text" name="autor"   style="display: none;" value="{{usu.nome_completo}}">
             <br>
-            <button id="btnchamado" type="submit">Abrir Chamado</button>
+            <div id="divbtncham" style="display: none;">
+                <button id="btnchamado" type="submit">Abrir Chamado</button>
+            </div>
         </form>
         <br>
+        <div id="feed">
+            <form>
+                <br>
+                <center>
+                    <label for="mensagem">Feedback</label>
+                </center>
+                <br>
+                <textarea type="text" id="feedback" name='feedback' required></textarea>
+                <br>
+                <br>
+                <div id="divbtntrat" style="display: none;">
+                    <button id='btnfeedback' type='submit'>Enviar Feedback</button>
+                    <br>
+                    <br>
+                </div>
+            </form>
+        </div>
+        <script>
+            function adm(){
+                var UsTipo = "{{ UsTipo }}";
+                var fdbk = "{{ feedback }}";
+                var feed = document.getElementById("feed");
+                var tratar = document.getElementById("divbtntrat");
+                var cham =  document.getElementById("divbtncham");
 
-        <!-- Chama o bloco do feedback -->
-        {{ feedback }}
-
+                if (UsTipo == '1'){
+                    feed.style.display = "block";
+                    if (fdbk != ""){
+                        tratar.style.display = "block";
+                        document.getElementById('descricao').disabled = true;
+                        document.getElementById('local').disabled = true;
+                        document.getElementById('dataprevista').disabled = true;
+                    }
+                }else{
+                    if (fdbk != ""){
+                        feed.style.display = "block";
+                        document.getElementById('descricao').disabled = true;
+                        document.getElementById('local').disabled = true;
+                        document.getElementById('dataprevista').disabled = true;
+                    }else{
+                        cham.style.display = "block";
+                    }
+                }
+            }
+        </script>
     </div>
 </body>
 </html>

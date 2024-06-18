@@ -75,12 +75,12 @@
                 <br>
                 <div class="input-container">
                     <label for="freq">Frequência: </label>
-                    <input type="text" id="freq" name="destinatario" value="{{ frequencia }}" required>
+                    <input type="text" id="freq" name="freq" value="{{ frequencia }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="resp">Responsável: </label>
-                    <input type="text" id="resp" name="dataprevista" value="{{ responsavel }}" required>
+                    <input type="text" id="resp" name="resp" value="{{ responsavel }}" required>
                 </div>
             </div>
             <br>
@@ -93,18 +93,60 @@
             <br>
             <br>
             <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
-
-            <!-- ocultar quando houver feedback -->
-            <div>
+            <div id="divbtncham">
                 <button id="btnchamado" type="submit">Abrir Reclamação</button>
             </div>
-
         </form>
         <br>
+        <div id="feed">
+            <form>
+                <br>
+                <center>
+                    <label for="mensagem">Feedback</label>
+                </center>
+                <br>
+                <textarea type="text" id="feedback" name='feedback' required></textarea>
+                <br>
+                <br>
+                <div id="divbtntrat" style="display: none;">
+                    <button id='btnfeedback' type='submit'>Enviar Feedback</button>
+                    <br>
+                    <br>
+                </div>
+            </form>
+        </div>
+        <script>
+            function adm(){
+                var UsTipo = "{{ UsTipo }}";
+                var fdbk = "{{ feedback }}";
+                var feed = document.getElementById("feed");
+                var tratar = document.getElementById("divbtntrat");
+                var cham =  document.getElementById("divbtncham");
 
-        <!-- Chama o bloco do feedback -->
-        {{ feedback }}
-
+                if (UsTipo == '1'){
+                    feed.style.display = "block";
+                    if (fdbk != ""){
+                        tratar.style.display = "block";
+                        document.getElementById('descricao').disabled = true;
+                        document.getElementById('local').disabled = true;
+                        document.getElementById('dataprevista').disabled = true;
+                        document.getElementById('freq').disabled = true;
+                        document.getElementById('resp').disabled = true;
+                    }
+                }else{
+                    if (fdbk != ""){
+                        feed.style.display = "block";
+                        document.getElementById('descricao').disabled = true;
+                        document.getElementById('local').disabled = true;
+                        document.getElementById('dataprevista').disabled = true;
+                        document.getElementById('freq').disabled = true;
+                        document.getElementById('resp').disabled = true;
+                    }else{
+                        cham.style.display = "block";
+                    }
+                }
+            }
+        </script>
     </div>
 </body>
 </html>
