@@ -65,22 +65,22 @@
             <div class="campos">
                 <div class="input-container">
                     <label for="destinatario">Unidade (local): </label>
-                    <input type="text" id="destinatario" name="destinatario" value="{{ local }}" required>
+                    <input type="text" id="destinatario" name="local" value="{{ chamado.local }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="dataprevista">Periodo Ocorrido: </label>
-                    <input type="text" id="dataprevista" name="dataprevista" value="{{ data }}" required>
+                    <input type="text" id="dataprevista" name="dataprevista" value="{{ chamado.data }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="freq">Frequência: </label>
-                    <input type="text" id="freq" name="freq" value="{{ frequencia }}" required>
+                    <input type="text" id="freq" name="freq" value="{{ chamado.frequencia }}" required>
                 </div>
                 <br>
                 <div class="input-container">
                     <label for="resp">Responsável: </label>
-                    <input type="text" id="resp" name="resp" value="{{ responsavel }}" required>
+                    <input type="text" id="resp" name="resp" value="{{ chamado.responsavel }}" required>
                 </div>
             </div>
             <br>
@@ -89,7 +89,7 @@
             </center>
             <br>
             <br>
-            <textarea type="text" id="desc" name="descricao" required>{{ descricao }}</textarea>
+            <textarea type="text" id="desc" name="descricao" required>{{ chamado.descricao }}</textarea>
             <br>
             <br>
             <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
@@ -106,7 +106,10 @@
                     <label for="feedback">Feedback</label>
                 </center>
                 <br>
-                <textarea type="text" id="feedback" name='feedback'required>{{ feedback }}</textarea>
+                <textarea type="text" id="feedback" name='feedback'required>{{ chamado.feedback }}</textarea>
+                <br>
+                <input type="text" name="idC" value="{{chamado.id}}" style="display: none;">
+                <input type="text" name="situ" value="Tratado" style="display: none;">
                 <br>
                 <br>
                 <div id="divbtntrat" style="display: none;">
@@ -122,7 +125,7 @@
                 const tratar = document.getElementById("divbtntrat");
                 const cham =  document.getElementById("divbtncham");
                 var fdbk = document.getElementById("feedback").textContent;
-                var UsTipo = "{{ UsTipo }}";
+                var UsTipo = "{{ usu.tipo }}";
 
                 if (UsTipo == '1'){
                     feed.style.display = "block";

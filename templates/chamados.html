@@ -75,7 +75,8 @@
 					</li>	
 					</li>
 					{% for documento in chamados %}
-					<li onclick="location.href('/notificacao')">
+					<a href="/{{documento.tipo}}?var={{documento.id}}">
+					<li>
 						<div>{{ documento.autor }}</div>
 						<div>{{ documento.descricao }}</div>
 						<div>{{ documento.local }}</div>
@@ -83,6 +84,7 @@
 						<div>{{ documento.tipo }}</div>
 						<div>{{ documento.situacao}}</div>
 					</li>
+					</a>
 					{% endfor %}
 				</ul>
 			</div>

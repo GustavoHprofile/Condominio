@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 import certifi
 
 user = "gustavoprofile762"
@@ -10,7 +11,11 @@ client = MongoClient(url)
 db = client['CondDb']
 coll = db['Cond']
 
+
 filtro = {'campo':'Chamado'}
 
 coll.delete_many(filtro)
+
+
+
 

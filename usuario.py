@@ -30,12 +30,13 @@ except Exception as e:
 
 #Classes
 class Usuario:
-    def __init__(self, nome_completo, documento, email, senha, telefone):
+    def __init__(self, nome_completo, documento, email, senha, telefone, idU):
         self.nome_completo = nome_completo
         self.documento = documento
         self.email = email
         self.senha = senha
         self.telefone = telefone
+        self.id = idU
 
     def cadastrar(self):
         document = {
@@ -50,8 +51,8 @@ class Usuario:
         
 
 class Morador(Usuario):
-    def __init__(self, nome_completo, documento, email, senha, telefone, endereco):
-        super().__init__(nome_completo, documento, email, senha, telefone)
+    def __init__(self, nome_completo, documento, email, senha, telefone, idU, endereco):
+        super().__init__(nome_completo, documento, email, senha, telefone, idU)
         self.endereco = endereco
         self.tipo = '0'
     #Função de Cadastor da rota /cadastrar
@@ -76,14 +77,14 @@ class Morador(Usuario):
         
         filtro = {'autor': self.nome_completo}
         
-        contagem = coll.count_documents(filtro)
+        contagem = coll.count_documents(filtro and {'campo':'Chamado'})
 
         if contagem == 0:
             documento = 'nenhum'
         else:
-            obj = coll.find(filtro)
+            obj = coll.find(filtro and {'campo':'Chamado'})
             for doc  in obj:
-                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'])
+                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'], doc['_id'])
 
                 documento.append(chamado)
 
@@ -91,8 +92,8 @@ class Morador(Usuario):
     
     
 class Sindico(Usuario):
-    def __init__(self, nome_completo, documento, email, senha, telefone, endereco):
-        super().__init__(nome_completo, documento, email, senha, telefone)
+    def __init__(self, nome_completo, documento, email, senha, telefone, idU, endereco):
+        super().__init__(nome_completo, documento, email, senha, telefone, idU)
         self.endereco = endereco
         self.tipo = '1'
       
@@ -110,7 +111,7 @@ class Sindico(Usuario):
         else:
             obj = coll.find(filtro)
             for doc  in obj:
-                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'])
+                chamado = Chamado( doc['autor'], doc['descricao'], doc['local'], doc['data'], doc['situacao'], doc['tipo'], doc['feedback'], doc['_id'])
 
                 documento.append(chamado)
 
@@ -130,7 +131,7 @@ class Condominio:
 
 #Chamados ===========================================================================================================
 class Chamado:
-    def __init__(self, autor, descricao, local, data, situacao, tipo, feedback):
+    def __init__(self, autor, descricao, local, data, situacao, tipo, feedback, idC):
         self.autor = autor
         self.descricao = descricao
         self.local = local
@@ -139,11 +140,12 @@ class Chamado:
         self.situacao = situacao
         self.tipo = tipo
         self.feedback = feedback
+        self.id = idC
     
 #Notificação referênte a solicitar
 class Notificacao(Chamado):
-    def __init__(self, autor, descricao, local,  data, situacao, tipo, feedback, dataprevista):
-        super().__init__(autor, descricao, local, data, situacao, tipo, feedback)
+    def __init__(self, autor, descricao, local,  data, situacao, tipo, feedback, idC, dataprevista):
+        super().__init__(autor, descricao, local, data, situacao, tipo, feedback, idC)
         self.dataprevista = dataprevista
         self.tipo = 'Notificacao'
 
@@ -165,8 +167,8 @@ class Notificacao(Chamado):
 
 #Reparo referente a reparo
 class Reparo(Chamado):
-    def __init__(self, autor, descricao, local, data,  situacao, tipo, feedback, coordenadas):
-        super().__init__(autor, descricao, local, data, situacao, tipo, feedback)
+    def __init__(self, autor, descricao, local, data,  situacao, tipo, feedback, idC, coordenadas):
+        super().__init__(autor, descricao, local, data, situacao, tipo, feedback, idC)
         self.cord = coordenadas
         self.tipo = 'Reparo'
     
@@ -188,8 +190,8 @@ class Reparo(Chamado):
         return
 #Queixa referente a formulario
 class Queixa(Chamado):
-    def __init__(self, autor, descricao, local, data, situacao, tipo, frequencia, feedback, responsavel):
-        super().__init__(autor, descricao, local, data, situacao, tipo, feedback)
+    def __init__(self, autor, descricao, local, data, situacao, tipo, frequencia, feedback, idC, responsavel):
+        super().__init__(autor, descricao, local, data, situacao, tipo, feedback, idC)
         self.responsavel = responsavel
         self.frequencia = frequencia
 
@@ -212,12 +214,13 @@ class Queixa(Chamado):
         return
 #Sugestão  referente a sugestão======================================================================================================
 class Sugestao:
-    def __init__(self, autor, tema, data, descricao):
+    def __init__(self, autor, tema, data, descricao, idG):
         self.autor = autor
         self.tema = tema
         self.data = data
         self.descricao = descricao
         self.campo = 'sug'
+        self.id = idG
     
     def inserir(self):
         documento = {

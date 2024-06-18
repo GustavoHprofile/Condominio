@@ -39,7 +39,7 @@
 	height: 100vh;
 }
 
-a { cursor: default; }
+a { text-decoration: none; cursor: default; }
 
 body {
 	overflow-x: hidden;
