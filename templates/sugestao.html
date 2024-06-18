@@ -53,12 +53,12 @@
             <div class="campos">
                 <div class="input-container">
                     <label for="destinatario">Tema: </label>
-                    <input type="text" id="destinatario" name="tema" required>
+                    <input type="text" id="destinatario" name="tema" value="{{ tema }}" required>
                 </div>
                 <br>
                 <div class="input-container">
-                    <label for="dataprevista">Data prevista: </label>
-                    <input type="text" id="dataprevista" name="data" required>
+                    <label for="dataprevista">Data: </label>
+                    <input type="text" id="data" name="data" value="{{ data }}" required>
                 </div>
             </div>
             <br>
@@ -68,12 +68,16 @@
             </center>
             <br>
             <br>
-            <textarea type="text" id="mensagem" name="desc" required></textarea>
+            <textarea type="text" id="mensagem" name="desc" value="{{ descri }}" required></textarea>
             <br>
             <br>
             <button id="btnchamado" type="submit">Abrir Sugestão</button>
         </form>
         <br>
     </div>
+
+    <!-- Chama o bloco do feedback -->
+    {{ feedback }}
+
 </body>
 </html>
