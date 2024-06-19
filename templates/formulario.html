@@ -10,11 +10,33 @@
     <meta charset="UTF-8">
     <script src="{{url_for('static', filename='js/jquery-3.7.0.js')}}"></script>
     <script src="{{url_for('static', filename='js/js.js')}}"></script>
+    <script>
+        function home(){
+            var UsTipo = "{{ usu.tipo }}";
+
+            if (UsTipo == '1'){
+                window.location.href = '/chamados';
+            }else{
+                window.location.href = '/home';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const imgs = document.querySelectorAll(".usr");
+            const usrname = "{{ usu.nome_completo }}"; 
+            const number = usrname.length % 6 + 1;
+            imgs.forEach(img => {
+                const currentSrc = img.getAttribute("src");
+                const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+                img.setAttribute("src", newSrc);
+            });
+        });
+    </script>
 </head>
 <body>
 <div id="nav">
     <i class="fa fa-bars menu" id="toggleButton"></i>
-    <a href="/home"><p class="menu texto">De Olho no Condomínio</p></a>
+    <a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
     <div class="navusr">
         <a onclick="logoff()">
             <h5>{{ usu.nome_completo }}</h5>
@@ -64,8 +86,8 @@
         <form action="/que" method="POST">
             <div class="campos">
                 <div class="input-container">
-                    <label for="destinatario">Unidade (local): </label>
-                    <input type="text" id="destinatario" name="local" value="{{ chamado.local }}" required>
+                    <label for="local">Unidade (local): </label>
+                    <input type="text" id="local" name="local" value="{{ chamado.local }}" required>
                 </div>
                 <br>
                 <div class="input-container">
@@ -93,14 +115,12 @@
             <br>
             <br>
             <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
-            <div id="divbtncham">
+            <div id="divbtncham" style="display: none;">
                 <button id="btnchamado" type="submit">Abrir Reclamação</button>
             </div>
         </form>
         <br>
         <div id="feed" style="display: none;">
-            <br>
-            <br>
             <form id="fd" style="width: 100%;" action="/feed" method="POST">
                 <center>
                     <label for="feedback">Feedback</label>
@@ -110,7 +130,6 @@
                 <br>
                 <input type="text" name="idC" value="{{chamado.id}}" style="display: none;">
                 <input type="text" name="situ" value="Tratado" style="display: none;">
-                <br>
                 <br>
                 <div id="divbtntrat" style="display: none;">
                     <button id='btnfeedback' type='submit'>Enviar Feedback</button>
@@ -126,31 +145,38 @@
                 const cham =  document.getElementById("divbtncham");
                 var fdbk = document.getElementById("feedback").textContent;
                 var UsTipo = "{{ usu.tipo }}";
+                var local = "{{ chamado.local }}";
 
                 if (UsTipo == '1'){
                     feed.style.display = "block";
                     document.getElementById('desc').readOnly = true;
                     document.getElementById('local').readOnly = true;
                     document.getElementById('dataprevista').readOnly = true;
-                        document.getElementById('freq').readOnly = true;
-                        document.getElementById('resp').readOnly = true;
+                    document.getElementById('freq').readOnly = true;
+                    document.getElementById('resp').readOnly = true;
+
                     if (fdbk == null || fdbk == ''){
                         tratar.style.display = "block";
-                    }
-                }else{
-                    if (fdbk == null || fdbk == ''){
-                        cham.style.display = "block";
                     }else{
+                        document.getElementById('feedback').readOnly = true;
+                    }
+
+                }else{
+
+                    if (fdbk == null || fdbk == '' && local == null || local == ''){
+                        cham.style.display = "block";
+                    }else if(fdbk != null && fdbk != ''){
                         feed.style.display = "block";
                         document.getElementById('desc').readOnly = true;
                         document.getElementById('local').readOnly = true;
                         document.getElementById('dataprevista').readOnly = true;
                         document.getElementById('freq').readOnly = true;
                         document.getElementById('resp').readOnly = true;
+                        document.getElementById('feedback').readOnly = true;
                     }
+                    
                 }
             }
-
             window.onload = adm;
         </script>
     </div>

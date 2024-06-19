@@ -10,11 +10,33 @@
     <meta charset="UTF-8">
     <script src="{{url_for('static', filename='js/jquery-3.7.0.js')}}"></script>
     <script src="{{url_for('static', filename='js/js.js')}}"></script>
+    <script>
+        function home(){
+            var UsTipo = "{{ usu.tipo }}";
+
+            if (UsTipo == '1'){
+                window.location.href = '/chamados';
+            }else{
+                window.location.href = '/home';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const imgs = document.querySelectorAll(".usr");
+            const usrname = "{{ usu.nome_completo }}"; 
+            const number = usrname.length % 6 + 1;
+            imgs.forEach(img => {
+                const currentSrc = img.getAttribute("src");
+                const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+                img.setAttribute("src", newSrc);
+            });
+        });
+    </script>
 </head>
 <body>
 <div id="nav">
     <i class="fa fa-bars menu" id="toggleButton"></i>
-    <a href="/home"><p class="menu texto">De Olho no Condomínio</p></a>
+    <a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
     <div class="navusr">
         <a onclick="logoff()">
             <h5>{{ usu.nome_completo }}</h5>
@@ -102,27 +124,34 @@
             const cham =  document.getElementById("divbtncham");
             var fdbk = document.getElementById("feedback").textContent;
             var UsTipo = "{{ usu.tipo }}";
+            var local = "{{ tema }}";
 
             if (UsTipo == '1'){
                 feed.style.display = "block";
                 document.getElementById('desc').readOnly = true;
                 document.getElementById('tema').readOnly = true;
                 document.getElementById('data').readOnly = true;
+
                 if (fdbk == null || fdbk == ''){
                     tratar.style.display = "block";
-                }
-            }else{
-                if (fdbk == null || fdbk == ''){
-                    cham.style.display = "block";
                 }else{
+                    document.getElementById('feedback').readOnly = true;
+                }
+
+            }else{
+
+                if (fdbk == null || fdbk == '' && local == null || local == ''){
+                    cham.style.display = "block";
+                }else if(fdbk != null && fdbk != ''){
                     feed.style.display = "block";
                     document.getElementById('desc').readOnly = true;
                     document.getElementById('tema').readOnly = true;
                     document.getElementById('data').readOnly = true;
+                    document.getElementById('feedback').readOnly = true;
                 }
+                
             }
         }
-
         window.onload = adm;
     </script>
 </body>

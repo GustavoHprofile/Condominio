@@ -10,6 +10,27 @@
 		<meta charset="UTF-8">
 		<script src="{{url_for('static',filename='js/jquery-3.7.0.js')}}"></script>
 		<script src="{{url_for('static',filename='js/js.js')}}"></script>
+		<script>
+			function home(){
+				var UsTipo = "{{ usu.tipo }}";
+	
+				if (UsTipo == '0'){
+					window.location.href = '/home';
+				}
+			}
+			windows.onload = home;
+	
+			document.addEventListener("DOMContentLoaded", function() {
+				const imgs = document.querySelectorAll(".usr");
+				const usrname = "{{ usu.nome_completo }}"; 
+				const number = usrname.length % 6 + 1;
+				imgs.forEach(img => {
+					const currentSrc = img.getAttribute("src");
+					const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+					img.setAttribute("src", newSrc);
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<div class="navusr">
