@@ -149,7 +149,7 @@ def recuperar():
 @app.route('/dutos')
 def dutos():
     if(current_app.config['logado'] != False):
-        Tipochamado = 'Reparo de Dultos'
+        Tipochamado = 'Reparo de Dutos'
         usu = current_app.config['logado'] 
         chamado = ''
         return render_template('reparo.html', usu = usu, Tipochamado = Tipochamado, chamado = chamado)

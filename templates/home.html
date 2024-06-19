@@ -10,14 +10,46 @@
 		<meta charset="UTF-8">
 		<script src="{{url_for('static',filename='js/jquery-3.7.0.js')}}"></script>
 		<script src="{{url_for('static',filename='js/js.js')}}"></script>
+		<script>
+			function home(){
+				var UsTipo = "{{ usu.tipo }}";
+	
+				if (UsTipo == '1'){
+					window.location.href = '/chamados';
+				}
+			}
+			window.onload = home;
+
+			document.addEventListener("DOMContentLoaded", function() {
+				const imgs = document.querySelectorAll(".usr");
+				const usrname = "{{ usu.nome_completo }}"; 
+
+				function hashString(str) {
+					let hash = 0;
+					for (let i = 0; i < str.length; i++) {
+						hash = (hash << 5) - hash + str.charCodeAt(i);
+						hash |= 0;
+					}
+					return hash;
+				}
+				const hash = hashString(usrname);
+				const number = (Math.abs(hash) % 6) + 1;
+
+				imgs.forEach(img => {
+					const currentSrc = img.getAttribute("src");
+					const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+					img.setAttribute("src", newSrc);
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<div id="nav">
 			<i class="fa fa-bars menu" id="toggleButton"></i>
-			<p class="menu texto">De Olho no Condomínio</p>
+			<a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
 			<div class="navusr">
 				<a onclick="logoff()">
-					<h5>{{ usu.nome_completo}}</h5>
+					<h5>{{ usu.nome_completo }}</h5>
 					<img class="usr" src="../static/img/6.jpg">
 				</a>
 			</div>

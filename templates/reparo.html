@@ -18,9 +18,8 @@
 				var set = "-23.1812991, -46.8829011";
 				var marker = null;
 				
-				if (coord != ""){
+				if (coord != "") {
 					set = coord;
-					marker = coord;
 				}
 				
 				var latLng = set.split(", ");
@@ -33,30 +32,69 @@
                 maxZoom: 18
             }).addTo(map);
 
+            if (coord != "") {
+                var coordLatLng = L.latLng(lat, lon);
+                marker = L.marker(coordLatLng, { draggable: false }).addTo(map);
+            }
+
             function onMapClick(e) {
-                if (marker) {
-                    marker.setLatLng(e.latlng);
-                } else {
-                    marker = L.marker(e.latlng, {
-                        draggable: true
-                    }).addTo(map);
+                if (coord == "") {
+                    if (marker) {
+                        marker.setLatLng(e.latlng);
+                    } else {
+                        marker = L.marker(e.latlng, {
+                            draggable: true
+                        }).addTo(map);
+                    }
+                    $('#coordenadas').val(e.latlng.lat + ", " + e.latlng.lng);
                 }
-                $('#coordenadas').val(e.latlng.lat + ", " + e.latlng.lng);
             }
             map.on('click', onMapClick);
 
             function onZoomChange(e) {
-                $('#coordenadas').val( map.getCenter().lat + ", " + map.getCenter().lng);
+                $('#coordenadas').val(map.getCenter().lat + ", " + map.getCenter().lng);
             }
             map.on('zoomend', onZoomChange);
             onZoomChange();
         });
+
+        function home(){
+            var UsTipo = "{{ usu.tipo }}";
+
+            if (UsTipo == '1'){
+                window.location.href = '/chamados';
+            }else{
+                window.location.href = '/home';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+			const imgs = document.querySelectorAll(".usr");
+			const usrname = "{{ usu.nome_completo }}"; 
+
+			function hashString(str) {
+				let hash = 0;
+				for (let i = 0; i < str.length; i++) {
+					hash = (hash << 5) - hash + str.charCodeAt(i);
+					hash |= 0;
+				}
+				return hash;
+			}
+			const hash = hashString(usrname);
+			const number = (Math.abs(hash) % 6) + 1;
+
+			imgs.forEach(img => {
+				const currentSrc = img.getAttribute("src");
+				const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+				img.setAttribute("src", newSrc);
+			});
+		});
     </script>
 </head>
 <body>
     <div id="nav">
         <i class="fa fa-bars menu" id="toggleButton"></i>
-        <a href="{{ url_for('home') }}"><p class="menu texto">De Olho no Condomínio</p></a>
+        <a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
         <div class="navusr">
             <a onclick="logoff()">
                 <h5>{{ usu.nome_completo }}</h5>
@@ -104,7 +142,7 @@
             <h4 class="titulo">Abrir Chamado - {{ Tipochamado }}</h4>
         </center>
         <br>
-        <div>
+        <div style="display: inline-block; width: 100%;">
             <form id="pg" action="/rep" method="POST">
                 <div class="campos">
                     <div class="input-container">
@@ -155,8 +193,8 @@
         </div>
         <div id="feed" style="display: none;">
             <br>
-            <br>
-            <form id="fd" style="width: 100%;" action="/feed" method="POST">
+            <form id="fd" action="/feed" method="POST">
+                <br>
                 <center>
                     <label for="feedback">Feedback</label>
                 </center>
@@ -180,25 +218,32 @@
                 const cham =  document.getElementById("divbtncham");
                 var fdbk = document.getElementById("feedback").textContent;
                 var UsTipo = "{{ usu.tipo }}";
+                var local = "{{ chamado.local }}";
 
                 if (UsTipo == '1'){
                     feed.style.display = "block";
                     document.getElementById('desc').readOnly = true;
                     document.getElementById('local').readOnly = true;
+
                     if (fdbk == null || fdbk == ''){
                         tratar.style.display = "block";
-                    }
-                }else{
-                    if (fdbk == null || fdbk == ''){
-                        cham.style.display = "block";
                     }else{
+                        document.getElementById('feedback').readOnly = true;
+                    }
+
+                }else{
+
+                    if (fdbk == null || fdbk == '' && local == null || local == ''){
+                        cham.style.display = "block";
+                    }else if(fdbk != null && fdbk != ''){
                         feed.style.display = "block";
                         document.getElementById('desc').readOnly = true;
                         document.getElementById('local').readOnly = true;
+                        document.getElementById('feedback').readOnly = true;
                     }
+                    
                 }
             }
-
             window.onload = adm;
         </script>
     </div>

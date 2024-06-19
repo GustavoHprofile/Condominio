@@ -13,23 +13,26 @@ $(document).ready(function() {
                 .animate({ left: '0px' }, 300);
         }
     });
-});
 
-$(document).ready(function() {
+    $('.barralateralbg').on('click', function() {
+        var display = $('.barralateralbg').css('display');
+
+        $('.barralateral').animate({ left: '-370px' }, 300, function() {
+            $(this).css('display', 'none');
+        });
+        $('.barralateralbg').fadeOut(1000);
+    });
+
     $('#alterar').on('click', function() {
 		$('#altse').css('display', 'none');
 		$('#opcoes').css('display', 'block');
     });
-});
 
-$(document).ready(function() {
     $('#cancelar').on('click', function() {
 		$('#altse').css('display', 'block');
 		$('#opcoes').css('display', 'none');
     });
-});
 
-$(document).ready(function() {
     function vertam() {
         var largura = $(window).width();
         var altura = $(window).height();
@@ -53,7 +56,6 @@ $(document).ready(function() {
     $(window).on('resize', vertam);
     vertam();
 });
-
 
 function excluir() {
 	if (confirm('Deseja realmente excluir seu perfil?')) {
@@ -83,3 +85,31 @@ document.addEventListener('DOMContentLoaded', () => {
 		tel.value = valor
 	}
 });
+
+function editaremail() {
+    var emailInput = document.getElementById('email');
+    var editLink = document.getElementById('editaemail');
+
+    if (emailInput.readOnly) {
+        editLink.innerText = 'Salvar';
+        emailInput.readOnly = false;
+        emailInput.focus;
+    } else {
+        editLink.innerText = 'Editar';
+        emailInput.readOnly = true;
+    }
+}
+
+function editartel() {
+    var emailInput = document.getElementById('tel');
+    var editLink = document.getElementById('editatel');
+
+    if (emailInput.readOnly) {
+        editLink.innerText = 'Salvar';
+        emailInput.readOnly = false;
+        emailInput.focus;
+    } else {
+        editLink.innerText = 'Editar';
+        emailInput.readOnly = true;
+    }
+}
