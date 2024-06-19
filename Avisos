@@ -3,7 +3,7 @@ Fazer a tela para responder o chamado ✓
 atualizar a documentação e fazer o alterar senha --
 impedir que o sindico possa voltar pra home ✓
 
-campos carregados com o feedback:
+Campos carregados com o feedback:
 
 #NOTIFICAÇÕES (solicitar.html)
 descricao
@@ -27,5 +27,16 @@ tema
 data
 descri
 
-Ultima Atualização 19:47 18/06
-correção dos botões e restrição do sindico à home.
+
+Campos carregados com confirmar cadastros (confirmar.html linha 110):
+nome_completo
+documento
+endereco
+telefone
+email
+data
++botões
+
+
+Ultima Atualização 9:01 19/06
+inclusão confirmar cadastros, barra lateral refeita

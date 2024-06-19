@@ -22,15 +22,26 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            const imgs = document.querySelectorAll(".usr");
-            const usrname = "{{ usu.nome_completo }}"; 
-            const number = usrname.length % 6 + 1;
+			const imgs = document.querySelectorAll(".usr");
+			const usrname = "{{ usu.nome_completo }}"; 
+
+			function hashString(str) {
+				let hash = 0;
+				for (let i = 0; i < str.length; i++) {
+					hash = (hash << 5) - hash + str.charCodeAt(i);
+					hash |= 0;
+				}
+				return hash;
+			}
+			const hash = hashString(usrname);
+			const number = (Math.abs(hash) % 6) + 1;
+
             imgs.forEach(img => {
-                const currentSrc = img.getAttribute("src");
-                const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
-                img.setAttribute("src", newSrc);
-            });
-        });
+				const currentSrc = img.getAttribute("src");
+				const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+				img.setAttribute("src", newSrc);
+			});
+		});
     </script>
 </head>
 <body>
