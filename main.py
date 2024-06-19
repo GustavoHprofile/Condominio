@@ -56,13 +56,12 @@ def index():
 def log():
     login = request.form.get('login')
     senha = request.form.get('senha')
-    
+    logado = '1'
     filtro = {'UsEma': login}
 
     documento = coll.find_one(filtro)
     
     if (documento is not None and senha == documento['UsSenha']):
-
         #tipo de usuário
         if(documento['UsTipo'] == '1'):
             usuario = Sindico(documento['UsNom'], documento['UsDoc'], documento['UsEma'], documento['UsSenha'], documento['UsTelefone'], documento['_id'], documento['UsEndereco'])
@@ -80,7 +79,8 @@ def log():
             current_app.config['logado'] = usuario
             return render_template('home.html', usu = usuario)
     else:
-        return render_template('index.html')
+        logado = '0'
+        return render_template('index.html', logado=logado)
 # Log Out 
 @app.route('/logout')
 def logout():
@@ -503,7 +503,6 @@ def tel():
         else:
             return redirect(url_for('index'))
     return redirect(url_for('home'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
