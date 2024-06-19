@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, current_app,  jsonify
-from usuario import Morador, Notificacao, Reparo, Sugestao, Sindico, Queixa
+from usuario import Usuario, Morador, Notificacao, Reparo, Sugestao, Sindico, Queixa
 from pymongo import MongoClient, errors
 import certifi
 from datetime import datetime
@@ -449,6 +449,60 @@ def nval():
             return redirect(url_for('confirmar'))
         
     return render_template('index.html')
+
+#MODIFICAR
+@app.route('/ema', methods=['GET', 'POST'])
+def ema():
+    if request.method == 'POST':
+        if current_app.config['logado'] != False:
+            usu = current_app.config['logado']
+            ema = request.form.get('ema')
+            novo = Usuario(usu.nome_completo, usu.documento, ema, usu.senha, usu.telefone, usu.id)
+
+            novo.modificar()
+
+            current_app.config['logado'] == False
+
+            return render_template('index.html')
+        else:
+            return redirect(url_for('index'))
+    return redirect(url_for('home'))
+
+@app.route('/pas', methods=['GET', 'POST'])
+def pas():
+    if request.method == 'POST':
+        if current_app.config['logado'] != False:
+            usu = current_app.config['logado']
+            senha = request.form.get('senhanov')
+            antiga = request.form.get('senhaant')
+            novo = Usuario(usu.nome_completo, usu.documento, usu.email, senha, usu.telefone, usu.id)
+
+            if usu.senha == antiga:
+                novo.modificar()
+
+                current_app.config['logado'] == False
+
+            return render_template('index.html')
+        else:
+            return redirect(url_for('index'))
+    return redirect(url_for('home'))
+
+@app.route('/tel', methods=['GET', 'POST'])
+def tel():
+    if request.method == 'POST':
+        if current_app.config['logado'] != False:
+            usu = current_app.config['logado']
+            tel = request.form.get('tel')
+            novo = Usuario(usu.nome_completo, usu.documento, usu.email, usu.senha, tel, usu.id)
+
+            novo.modificar()
+
+            current_app.config['logado'] == False
+
+            return render_template('index.html')
+        else:
+            return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
