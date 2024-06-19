@@ -105,18 +105,18 @@
 						<div>Data:</div>
 						<div>Aprovação:</div>
 					</li>
-					{% for documento in chamados %}
+					{% for doc in chamado %}
 					<li>
-						<div>{{ nome_completo }}</div>
-						<div>{{ documento }}</div>
-						<div>{{ endereco }}</div>
-						<div>{{ telefone }}</div>
-						<div>{{ email }}</div>
-						<div>{{ data }}</div>
+						<div>{{ doc.nome_completo }}</div>
+						<div>{{ doc.documento }}</div>
+						<div>{{ doc.endereco }}</div>
+						<div>{{ doc.telefone }}</div>
+						<div>{{ doc.email }}</div>
+						<div>{{ doc.data }}</div>
 						<div>
 							<form>
-								<button>✅</button>
-								<button>❌</button>
+								<a href="/validar?var={{doc.id}}">✅</a>
+								<a href="/nvalidar?var={{doc.id}}">❌</a>
 							</form>
 						</div>
 					</li>
@@ -125,4 +125,5 @@
 			</div>
 		</div>
 	</body>
+	
 </html>
