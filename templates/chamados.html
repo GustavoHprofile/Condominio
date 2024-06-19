@@ -10,11 +10,44 @@
 		<meta charset="UTF-8">
 		<script src="{{url_for('static',filename='js/jquery-3.7.0.js')}}"></script>
 		<script src="{{url_for('static',filename='js/js.js')}}"></script>
+		<script>
+			function home(){
+				var UsTipo = "{{ usu.tipo }}";
+	
+				if (UsTipo == '1'){
+					window.location.href = '/chamados';
+				}else{
+					window.location.href = '/home';
+				}
+			}
+
+			document.addEventListener("DOMContentLoaded", function() {
+				const imgs = document.querySelectorAll(".usr");
+				const usrname = "{{ usu.nome_completo }}"; 
+
+				function hashString(str) {
+					let hash = 0;
+					for (let i = 0; i < str.length; i++) {
+						hash = (hash << 5) - hash + str.charCodeAt(i);
+						hash |= 0;
+					}
+					return hash;
+				}
+				const hash = hashString(usrname);
+				const number = (Math.abs(hash) % 6) + 1;
+
+				imgs.forEach(img => {
+					const currentSrc = img.getAttribute("src");
+					const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+					img.setAttribute("src", newSrc);
+				});
+			});
+		</script>
 	</head>
-	<body onload="adm()">
+	<body>
 		<div id="nav">
 			<i class="fa fa-bars menu" id="toggleButton"></i>
-			<a href="{{ url_for('home') }}"><p class="menu texto">De Olho no Condomínio</p></a>
+			<a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
 			<div class="navusr">
 				<a onclick="logoff()">
 					<h5>{{ usu.nome_completo }}</h5>
@@ -29,28 +62,40 @@
 			<img class="usr" src="../static/img/6.jpg">
 			<h4 id="nomeusr">{{ usu.nome_completo }}</h4>
 			<h4 id="ap">{{ usu.endereco }}</h4>
-			<input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly>
+			<input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly><a id="editaemail" onclick="editaremail()">Editar</a>
 			<br>
 			<br>
-			<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly>
+			<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly><a id="editatel" onclick="editartel()">Editar</a>
 			<div class="menubottom">
 				<div id="opcoes" class="hidden">
-					<div style="position: fixed; bottom: 30px;">
+					<div style="position: fixed; bottom: 30px; left: 80px;">
 						<form>
-							<input id="senhaant" type="password" style="margin: 0px 0px 0px 50px;" placeholder="Senha antiga" required>
+							<input id="senhaant" type="password" placeholder="Senha antiga" required>
 							<br>
-							<input id="senhanov" type="password" style="margin: 15px 0px 0px 50px;" placeholder="Nova senha" required>
+							<input id="senhanov" type="password" placeholder="Nova senha" required>
 							<br>
-							<input id="senhaconf" type="password" placeholder="Confirme a senha" required><a id="confirmar" style="text-decoration: none;">Confirmar</a>
+							<input id="senhaconf" type="password" placeholder="Confirme a senha" required>
 							<br>
 							<br>
 						</form>
-						<a id="cancelar">Cancelar</a>
+						<div style="display: inline-block; width: 100%; margin: 0;">
+							<div style="float: left; width: 45%;">
+								<button id="cancelar" style="width: 100%;">Cancelar</button>
+							</div>
+							<div style="float: right; width: 45%;">
+								<button id="confirmar" style="width: 100%;">Confirmar</button>
+							</div>
+						</div>
+						
 					</div>
 				</div>
 				<div id="altse">
 					<center>
-						<a href="/chamados">Chamados</a>
+						<button href="/chamados">Chamados</button>
+						<br>
+						<button id="alterar">Alterar senha</button>
+						<br>
+						<button onclick="excluir()">Excluir perfil</button>
 					</center>
 				</div>
 			</div>
@@ -72,7 +117,6 @@
 						<div>Data:</div>
 						<div>Tipo:</div>
 						<div>Situação:</div>
-					</li>	
 					</li>
 					{% for documento in chamados %}
 					<a href="/{{documento.tipo}}?var={{documento.id}}">

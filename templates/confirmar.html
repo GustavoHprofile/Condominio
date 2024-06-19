@@ -10,25 +10,60 @@
 		<meta charset="UTF-8">
 		<script src="{{url_for('static',filename='js/jquery-3.7.0.js')}}"></script>
 		<script src="{{url_for('static',filename='js/js.js')}}"></script>
+		<script>
+			function home(){
+				var UsTipo = "{{ usu.tipo }}";
+	
+				if (UsTipo != '1'){
+					window.location.href = '/home';
+				}
+			}
+
+			document.addEventListener("DOMContentLoaded", function() {
+				const imgs = document.querySelectorAll(".usr");
+				const usrname = "{{ usu.nome_completo }}"; 
+
+				function hashString(str) {
+					let hash = 0;
+					for (let i = 0; i < str.length; i++) {
+						hash = (hash << 5) - hash + str.charCodeAt(i);
+						hash |= 0;
+					}
+					return hash;
+				}
+				const hash = hashString(usrname);
+				const number = (Math.abs(hash) % 6) + 1;
+
+				imgs.forEach(img => {
+					const currentSrc = img.getAttribute("src");
+					const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+					img.setAttribute("src", newSrc);
+				});
+			});
+		</script>
 	</head>
-	<body>
-		<div class="navusr">
-			<a onclick="logoff()">
-				<h5>{{ nome }}</h5>
-				<img class="usr" src="../static/img/6.jpg">
-			</a>
+	<body onload="adm()">
+		<div id="nav">
+			<i class="fa fa-bars menu" id="toggleButton"></i>
+			<a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
+			<div class="navusr">
+				<a onclick="logoff()">
+					<h5>{{ usu.nome_completo }}</h5>
+					<img class="usr" src="{{ url_for('static', filename='img/6.jpg') }}">
+				</a>
+			</div>
 		</div>
-	</div>
-	<div class="barralateral">
-		<h3>Gerenciar Perfil</h3>
-		<br>
-		<img class="usr" src="../static/img/6.jpg">
-		<h4 id="nomeusr">{{ nome }}</h4>
-		<h4 id="ap">{{ endereco }}"</h4>
-		<input id="email" type="email" placeholder="email@email.com" value="{{ email }}" autocomplete="off" readonly>
-		<br>
-		<br>
-		<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ tel }}" autocomplete="off" readonly>
+		<div class="barralateral">
+			<center>
+			<h3>Gerenciar Perfil</h3>
+			<br>
+			<img class="usr" src="../static/img/6.jpg">
+			<h4 id="nomeusr">{{ usu.nome_completo }}</h4>
+			<h4 id="ap">{{ usu.endereco }}</h4>
+			<input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly>
+			<br>
+			<br>
+			<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly>
 			<div class="menubottom">
 				<div id="opcoes" class="hidden">
 					<div style="position: fixed; bottom: 30px;">
@@ -51,39 +86,41 @@
 				</div>
 			</div>
 		</div>
+		</div>exit
 		<div class="barralateralbg">
 		</div>
 		<div class="corpo">
 			<center>
-				<h4 class="titulo">Confirmar Cadastros</h4>
+				<h4 class="titulo">Confirmar cadastros</h4>
 			</center>
 			<h4 style="margin: 40px 0px 8px 15px;">Meus Chamados</h4>
-			<div class="chamados confirmar">
+			<div class="chamados">
 				<ul>
-					<li>
-						<div>Fulano</div>
-						<div>Apartamento 11</div>
-						<div>1º Andar</div>
-						<div>11988889999</div>
-						<div>10/05/2024</div>
-						<div><input type="checkbox" name="tratativa"></div>
+					<li style="background-color: gray; color: white;">
+						<div>Nome:</div>
+						<div>CPF:</div>
+						<div>Endereço:</div>
+						<div>Telefone:</div>
+						<div>Email:</div>
+						<div>Data:</div>
+						<div>Aprovação:</div>
 					</li>
+					{% for documento in chamados %}
 					<li>
-						<div>Ciclano</div>
-						<div>Apartamento 02</div>
-						<div>Térreo</div>
-						<div>11900008888</div>
-						<div>01/05/2024</div>
-						<div><input type="checkbox" name="tratativa"></div>
+						<div>{{ nome_completo }}</div>
+						<div>{{ documento }}</div>
+						<div>{{ endereco }}</div>
+						<div>{{ telefone }}</div>
+						<div>{{ email }}</div>
+						<div>{{ data }}</div>
+						<div>
+							<form>
+								<button>✅</button>
+								<button>❌</button>
+							</form>
+						</div>
 					</li>
-					<li>
-						<div>Beutrano</div>
-						<div>Apartamento 03</div>
-						<div>Térreo</div>
-						<div>11988887777</div>
-						<div>01/01/2024</div>
-						<div><input type="checkbox" name="tratativa" checked></div>
-					</li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>

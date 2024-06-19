@@ -9,6 +9,8 @@
   src: url(arial.ttf);
 }
 
+#altse button { width: 150px; margin-top: 8px; }
+
 #barralateral.show { left: 0; }
 
 #btnchamado, #btnfeedback {
@@ -19,6 +21,8 @@
 	padding: 0px 50px 0px 50px;
 	float: right;
 }
+
+#editatel, #editaemail { margin-left: 10px;; }
 
 #nav {
 	background-color: #265CFF;
@@ -39,7 +43,10 @@
 	height: 100vh;
 }
 
-a { text-decoration: none; cursor: default; }
+a {
+	text-decoration: none;
+	cursor: default;
+}
 
 body {
 	overflow-x: hidden;
@@ -53,7 +60,7 @@ body {
 
 form { text-align: left; }
 
-input {
+input, button {
 	border: solid 1px gray;
 	border-radius: 8px;
 	outline: none;
@@ -99,7 +106,7 @@ textarea {
 	transition: left 0.3s ease;
 	
 	& input {
-		margin: 15px 15px 0px 50px;
+		margin: 8px 0 0 0;
 		text-align: center;
 	}
 
