@@ -63,7 +63,7 @@ class Morador(Usuario):
             'UsEma': self.email,
             'UsSenha' : self.senha,
             'UsEndereco' : self.endereco,
-            'UsTipo' : '0',
+            'UsTipo' : '4',
             'UsTelefone' : self.telefone
         }
 
@@ -118,8 +118,19 @@ class Sindico(Usuario):
         return documento
 
 #Tratar
-    def tratar():
-        return
+    def consultar(self):
+        perfis  = []
+        
+        filtro = {'UsTipo':'4'}
+        consulta = coll.count_documents(filtro)
+        if consulta >= 1:
+            consulta = coll.find(filtro)
+            for doc in consulta:
+                morador = Morador(doc['UsNom'], doc['UsDoc'], doc['UsEma'], doc['UsSenha'], doc['UsTelefone'], doc['_id'], doc['UsEndereco'])
+                perfis.append(morador)
+        else:
+            perfis = ''
+        return perfis
 
 #==========================================================================================================================
 class Condominio:
