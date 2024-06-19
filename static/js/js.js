@@ -60,7 +60,7 @@ $(document).ready(function() {
 function excluir() {
 	if (confirm('Deseja realmente excluir seu perfil?')) {
 		alert('Seu perfil será excluido!');
-		location.href='/excluirperfil';
+		location.href='/excluir';
 	} else {
 		alert('Exclusão cancelada!');
 	}
@@ -86,30 +86,85 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const cpf = document.getElementById('doc');
+
+    const mascaraCPF = (valor) => {
+        valor = valor.replace(/\D/g, "");
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        cpf.value = valor;
+    }
+
+    cpf.addEventListener('keypress', (e) => mascaraCPF(e.target.value));
+    cpf.addEventListener('change', (e) => mascaraCPF(e.target.value));
+});
+
+var emailAtual = "";
+
 function editaremail() {
     var emailInput = document.getElementById('email');
-    var editLink = document.getElementById('editaemail');
+    var emailLink = document.getElementById('editaemail');
 
     if (emailInput.readOnly) {
-        editLink.innerText = 'Salvar';
+        emailAtual = emailInput.value;
+        emailInput.value = "";
+        emailLink.innerText = 'Salvar';
         emailInput.readOnly = false;
-        emailInput.focus;
+        emailInput.focus();
     } else {
-        editLink.innerText = 'Editar';
-        emailInput.readOnly = true;
+        if (emailInput.value.trim() === "") {
+            emailInput.value = emailAtual;
+            alert("O email não pode ficar vazio!");
+        } else {
+            emailLink.innerText = 'Editar';
+            emailInput.readOnly = true;
+            document.getElementById('edteml').submit();
+        }
     }
 }
 
-function editartel() {
-    var emailInput = document.getElementById('tel');
-    var editLink = document.getElementById('editatel');
+var telAtual = "";
 
-    if (emailInput.readOnly) {
-        editLink.innerText = 'Salvar';
-        emailInput.readOnly = false;
-        emailInput.focus;
+function editartel() {
+    var telInput = document.getElementById('tel');
+    var telLink = document.getElementById('editatel');
+
+    if (telInput.readOnly) {
+        telAtual = telInput.value;
+        telInput.value = "";
+        telLink.innerText = 'Salvar';
+        telInput.readOnly = false;
+        telInput.focus();
     } else {
-        editLink.innerText = 'Editar';
-        emailInput.readOnly = true;
+        if (telInput.value.trim() === "") {
+            telInput.value = telAtual;
+            alert("O telefone não pode ficar vazio!");
+        } else {
+            telLink.innerText = 'Editar';
+            telInput.readOnly = true;
+            document.getElementById('edttel').submit();
+        }
+    }
+}
+
+function valida() {
+    var senhaAnt = document.getElementById('senhaant').value;
+    var senhaNov = document.getElementById('senhanov').value;
+    var senhaConf = document.getElementById('senhaconf').value;
+    var senhaConfInput = document.getElementById('senhaconf');
+
+    if (senhaNov !== senhaConf) {
+        senhaConfInput.classList.add('error');
+        alert('As senhas não coincidem.');
+    } else {
+        senhaConfInput.classList.remove('error');
+
+        if(senhaAnt != "" && senhaAnt != null) {
+            document.getElementById('pwdedt').submit();
+        }else{
+            alert("Preencha a senha atual!");
+        }
     }
 }

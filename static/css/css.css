@@ -9,6 +9,25 @@
   src: url(arial.ttf);
 }
 
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #5c5c5c #c2c2c2;
+}
+
+*::-webkit-scrollbar {
+	width: 15px;
+}
+
+*::-webkit-scrollbar-track {
+	background: #c2c2c2;
+  }
+
+*::-webkit-scrollbar-thumb {
+	background-color: #5c5c5c;
+	border-radius: 15px;
+	border: 1px solid #ffffff;
+}
+
 #altse button { width: 150px; margin-top: 8px; }
 
 #barralateral.show { left: 0; }
@@ -37,10 +56,10 @@
 
 #nomeusr, .titulo { font-weight: bold; }
 
-#opcoes {
-	background-color: #c2c2c2bf;
-	margin-right: 2px;
-	height: 100vh;
+#opcoes { background-color: #c2c2c2bf; }
+
+#senhaconf.error {
+	background-color: #ffdddd;
 }
 
 a {
@@ -57,8 +76,6 @@ body {
 	-moz-user-select: none;
 	-ms-user-select: none;
 }
-
-form { text-align: left; }
 
 input, button {
 	border: solid 1px gray;
@@ -104,7 +121,9 @@ textarea {
 	padding-top: 85px;
 	border-right: solid 2px gray;
 	transition: left 0.3s ease;
-	
+	overflow-y: auto;
+	overflow-x: hidden;
+
 	& input {
 		margin: 8px 0 0 0;
 		text-align: center;
@@ -159,6 +178,12 @@ textarea {
 	}
 	
 	& label { font-weight: bold; }
+}
+
+.brins {
+	width: 100%;
+	height: 89vh;
+	min-height: 600px;
 }
 
 .campos { margin: 0 25% 0 25%; }
@@ -290,7 +315,6 @@ textarea {
 }
 
 .menubottom {
-	position: absolute;
 	width: 370px;
 	left: 0;
 	bottom: 20px;

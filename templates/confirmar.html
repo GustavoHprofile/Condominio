@@ -13,11 +13,32 @@
 		<script>
 			function home(){
 				var UsTipo = "{{ usu.tipo }}";
+				var botao = document.getElementById('btnchamados');
 	
 				if (UsTipo != '1'){
 					window.location.href = '/home';
 				}
 			}
+
+			function direciona(){
+				var UsTipo = "{{ usu.tipo }}";
+				
+				if (UsTipo == '1'){
+					window.location.href = '/confirmar';
+				}else{
+					window.location.href = '/chamados';
+				}
+			}
+
+			function btndireciona(){
+				var UsTipo = "{{ usu.tipo }}";
+				var botao = document.getElementById('btnchamados');
+
+				if (UsTipo == '1'){
+					botao.innerText = 'Cadastros';
+				}
+			}
+			window.onload = btndireciona;
 
 			document.addEventListener("DOMContentLoaded", function() {
 				const imgs = document.querySelectorAll(".usr");
@@ -40,9 +61,25 @@
 					img.setAttribute("src", newSrc);
 				});
 			});
+
+			document.addEventListener('DOMContentLoaded', () => {
+            const cpfDivs = document.querySelectorAll('.cpf');
+
+            const mascaraCPF = (valor) => {
+                valor = valor.replace(/\D/g, ""); // Remove tudo o que não é dígito
+                valor = valor.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca um ponto entre o terceiro e o quarto dígitos
+                valor = valor.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca um ponto entre o sexto e o sétimo dígitos
+                valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Coloca um traço entre o nono e o décimo dígitos
+                return valor;
+            }
+
+            cpfDivs.forEach((div) => {
+                div.textContent = mascaraCPF(div.textContent);
+            });
+        });
 		</script>
 	</head>
-	<body onload="adm()">
+	<body>
 		<div id="nav">
 			<i class="fa fa-bars menu" id="toggleButton"></i>
 			<a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
@@ -54,39 +91,56 @@
 			</div>
 		</div>
 		<div class="barralateral">
-			<center>
-			<h3>Gerenciar Perfil</h3>
-			<br>
-			<img class="usr" src="../static/img/6.jpg">
-			<h4 id="nomeusr">{{ usu.nome_completo }}</h4>
-			<h4 id="ap">{{ usu.endereco }}</h4>
-			<input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly>
-			<br>
-			<br>
-			<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly>
-			<div class="menubottom">
-				<div id="opcoes" class="hidden">
-					<div style="position: fixed; bottom: 30px;">
-						<form>
-							<input id="senhaant" type="password" style="margin: 0px 0px 0px 50px;" placeholder="Senha antiga" required>
+			<div class="brins">
+				<center>
+				<h3>Gerenciar Perfil</h3>
+				<br>
+				<img class="usr" src="../static/img/6.jpg">
+				<h4 id="nomeusr">{{ usu.nome_completo }}</h4>
+				<h4 id="ap">{{ usu.endereco }}</h4>
+				<form id="edteml" action="">
+					<input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly><a id="editaemail" onclick="editaremail()">Editar</a>
+				</form>
+				<form id="edttel" action="">
+					<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly><a id="editatel" onclick="editartel()">Editar</a>
+				</form>
+				<div class="menubottom" style="box-sizing: content-box; margin-top: 230px;">
+					<div id="opcoes" class="hidden">
+						<form id="pwdedt" action="" style="box-sizing: content-box;">
+							<center>
+								<input id="senhaant" name="senhaant" type="password" placeholder="Senha antiga">
+								<br>
+								<input id="senhanov" name="senhanov" type="password" placeholder="Nova senha">
+								<br>
+								<input id="senhaconf" name="senhaconf" type="password" placeholder="Confirme a senha">
+							</center>
 							<br>
-							<input id="senhanov" type="password" style="margin: 15px 0px 0px 50px;" placeholder="Nova senha" required>
-							<br>
-							<input id="senhaconf" type="password" placeholder="Confirme a senha" required><a id="confirmar" style="text-decoration: none;">Confirmar</a>
+							<div style="display: inline-block; width: 320px; margin: 0 10px;">
+								<div style="float: left; width: 45%;">
+									<button id="cancelar" style="width: 100%;">Cancelar</button>
+								</div>
+								<div style="float: right; width: 45%;">
+									<button id="confirmar" style="width: 100%;" onclick="valida()">Confirmar</button>
+								</div>
+							</div>
 							<br>
 							<br>
 						</form>
-						<a id="cancelar">Cancelar</a>
 					</div>
-				</div>
-				<div id="altse">
-					<center>
-						<a href="/chamados">Chamados</a>
-					</center>
+					<div id="altse" style="padding-top: 55px;">
+						<center>
+							<button onclick="direciona()" id="btnchamados">Chamados</button>
+							<br>
+							<button id="alterar">Alterar senha</button>
+							<br>
+							<button onclick="excluir()">Excluir perfil</button>
+							<br>
+							<br>
+						</center>
+					</div>
 				</div>
 			</div>
 		</div>
-		</div>exit
 		<div class="barralateralbg">
 		</div>
 		<div class="corpo">
