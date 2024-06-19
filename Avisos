@@ -37,6 +37,13 @@ email
 data
 +botões
 
+** js.js validação da senha linha 117
+** js.js submit email linha 100 form id="edteml"
+** js.js submit tel 115 form id="edttel"
 
-Ultima Atualização 9:01 19/06
+formato cpf corrigido.
+
+** comparar 'senhaatual' e senha do bd com python
+
+Ultima Atualização 14:15 19/06
 inclusão confirmar cadastros, barra lateral refeita

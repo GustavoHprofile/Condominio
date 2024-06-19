@@ -1,66 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <title>De Olho no Condomínio</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/css.css') }}" />
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/fav.png') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/W3.css') }}">
-    <meta charset="UTF-8">
-    <script src="{{ url_for('static', filename='js/jquery-3.7.0.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/js.js') }}"></script>
-    <script>
-        function checkHeight() {
-            if (window.innerHeight < 650) {
-                document.body.style.overflowY = 'scroll';
-            } else {
-                document.body.style.overflowY = 'auto';
+    <head>
+        <title>De Olho no Condomínio</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/css.css') }}" />
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/fav.png') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/W3.css') }}">
+        <meta charset="UTF-8">
+        <script src="{{ url_for('static', filename='js/jquery-3.7.0.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/js.js') }}"></script>
+        <script>
+            function checkHeight() {
+                if (window.innerHeight < 650) {
+                    document.body.style.overflowY = 'scroll';
+                } else {
+                    document.body.style.overflowY = 'auto';
+                }
             }
-        }
 
-        window.addEventListener('resize', checkHeight);
-        window.addEventListener('load', checkHeight);
-    </script>
-</head>
-<body style="background-color: #424242;">
-    <div id="nav">
-        <p class="menu texto">De Olho no Condomínio</p>
-    </div>
-    <div class="corpo">
-        <div class="box">
-            <button onclick="location.href='/';" class="fechar">×</button>
-            <form action="/cadastrar" method="POST">
-                <label for="nome">Nome completo:</label>
-                <br>
-                <input id="nome" name="nome_completo" type="text" required>
-                <br><br>
-                <label for="doc">CPF:</label>
-                <br>
-                <input id="doc" name="documento" type="number" maxlength="11" required>
-                <br><br>
-                <label for="end">Endereço:</label>
-                <br>
-                <input id="end" name="endereco" type="text" required>
-                <br><br>
-                <label for="tel">Telefone:</label>
-                <br>
-                <input type="tel" class="form-control" id="tel" name="telefone" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" autocomplete="off" required>
-                <br><br>
-                <label for="email">Email:</label>
-                <br>
-                <input id="email" name="email" type="email" autocomplete="on" required>
-                <br><br>
-                <label for="senha">Senha:</label>
-                <br>
-                <input id="senha" name="senha" type="password" required>
-                <br><br>
-                <label for="conf">Confirme a senha:</label>
-                <br>
-                <input id="conf" type="password" required>
-                <br><br>
-                <button type="submit">Criar Cadastro</button>
-            </form>
+            window.addEventListener('resize', checkHeight);
+            window.addEventListener('load', checkHeight);
+        </script>
+    </head>
+    <body style="background-color: #424242;">
+        <div id="nav">
+            <p class="menu texto">De Olho no Condomínio</p>
         </div>
-    </div>
-</body>
+        <div class="corpo">
+            <div class="box">
+                <button onclick="location.href='/';" class="fechar">×</button>
+                <form action="/cadastrar" method="POST">
+                    <label for="nome">Nome completo:</label>
+                    <br>
+                    <input id="nome" name="nome_completo" type="text" required>
+                    <br><br>
+                    <label for="doc">CPF:</label>
+                    <br>
+                    <input id="doc" name="documento" type="text" maxlength="14" required>
+                    <br><br>
+                    <label for="end">Endereço:</label>
+                    <br>
+                    <input id="end" name="endereco" type="text" required>
+                    <br><br>
+                    <label for="tel">Telefone:</label>
+                    <br>
+                    <input type="tel" class="form-control" id="tel" name="telefone" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" autocomplete="off" required>
+                    <br><br>
+                    <label for="email">Email:</label>
+                    <br>
+                    <input id="email" name="email" type="email" autocomplete="on" required>
+                    <br><br>
+                    <label for="senha">Senha:</label>
+                    <br>
+                    <input id="senha" name="senha" type="password" required>
+                    <br><br>
+                    <label for="conf">Confirme a senha:</label>
+                    <br>
+                    <input id="conf" type="password" required>
+                    <br><br>
+                    <button type="submit">Criar Cadastro</button>
+                </form>
+            </div>
+        </div>
+    </body>
 </html>

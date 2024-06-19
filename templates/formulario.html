@@ -1,195 +1,234 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <title>De Olho no Condomínio</title>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/css.css')}}" />
-    <link rel="icon" type="image/png" href="{{url_for('static', filename='img/fav.png')}}">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/W3.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/FontAwesome4.7.0.css')}}">
-    <meta charset="UTF-8">
-    <script src="{{url_for('static', filename='js/jquery-3.7.0.js')}}"></script>
-    <script src="{{url_for('static', filename='js/js.js')}}"></script>
-    <script>
-        function home(){
-            var UsTipo = "{{ usu.tipo }}";
-
-            if (UsTipo == '1'){
-                window.location.href = '/chamados';
-            }else{
-                window.location.href = '/home';
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-				const imgs = document.querySelectorAll(".usr");
-				const usrname = "{{ usu.nome_completo }}"; 
-
-				function hashString(str) {
-					let hash = 0;
-					for (let i = 0; i < str.length; i++) {
-						hash = (hash << 5) - hash + str.charCodeAt(i);
-						hash |= 0;
-					}
-					return hash;
-				}
-				const hash = hashString(usrname);
-				const number = (Math.abs(hash) % 6) + 1;
-
-				imgs.forEach(img => {
-					const currentSrc = img.getAttribute("src");
-					const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
-					img.setAttribute("src", newSrc);
-				});
-			});
-    </script>
-</head>
-<body>
-<div id="nav">
-    <i class="fa fa-bars menu" id="toggleButton"></i>
-    <a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
-    <div class="navusr">
-        <a onclick="logoff()">
-            <h5>{{ usu.nome_completo }}</h5>
-            <img class="usr" src="../static/img/6.jpg">
-        </a>
-    </div>
-</div>
-<div class="barralateral">
-    <center>
-    <h3>Gerenciar Perfil</h3>
-    <br>
-    <img class="usr" src="../static/img/6.jpg">
-    <h4 id="nomeusr">{{ usu.nome_completo }}</h4>
-    <h4 id="ap">{{ usu.endereco }}"</h4>
-    <input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly>
-    <br>
-    <br>
-    <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly>
-        <div class="menubottom">
-            <div id="opcoes" class="hidden">
-                <div style="position: fixed; bottom: 30px;">
-                    <form>
-                        <input id="senhaant" type="password" style="margin: 0px 0px 0px 50px;" placeholder="Senha antiga" required>
-                        <br>
-                        <input id="senhanov" type="password" style="margin: 15px 0px 0px 50px;" placeholder="Nova senha" required>
-                        <br>
-                        <input id="senhaconf" type="password" placeholder="Confirme a senha" required><a id="confirmar" style="text-decoration: none;">Confirmar</a>
-                        <br>
-                        <br>
-                    </form>
-                    <a id="cancelar">Cancelar</a>
-                </div>
-            </div>
-            <div id="altse">
-                <center>
-                    <a href="/chamados">Chamados</a>
-                </center>
-            </div>
-        </div>
-    </div>
-    <div class="barralateralbg">
-    </div>
-    <div class="corpo">
-        <center>
-            <h4 class="titulo">Abrir Reclamação</h4>
-        </center>
-        <form action="/que" method="POST">
-            <div class="campos">
-                <div class="input-container">
-                    <label for="local">Unidade (local): </label>
-                    <input type="text" id="local" name="local" value="{{ chamado.local }}" required>
-                </div>
-                <br>
-                <div class="input-container">
-                    <label for="dataprevista">Periodo Ocorrido: </label>
-                    <input type="text" id="dataprevista" name="dataprevista" value="{{ chamado.data }}" required>
-                </div>
-                <br>
-                <div class="input-container">
-                    <label for="freq">Frequência: </label>
-                    <input type="text" id="freq" name="freq" value="{{ chamado.frequencia }}" required>
-                </div>
-                <br>
-                <div class="input-container">
-                    <label for="resp">Responsável: </label>
-                    <input type="text" id="resp" name="resp" value="{{ chamado.responsavel }}" required>
-                </div>
-            </div>
-            <br>
-            <center>
-                <label for="desc">Descrição</label>
-            </center>
-            <br>
-            <br>
-            <textarea type="text" id="desc" name="descricao" required>{{ chamado.descricao }}</textarea>
-            <br>
-            <br>
-            <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
-            <div id="divbtncham" style="display: none;">
-                <button id="btnchamado" type="submit">Abrir Reclamação</button>
-            </div>
-        </form>
-        <br>
-        <div id="feed" style="display: none;">
-            <form id="fd" style="width: 100%;" action="/feed" method="POST">
-                <center>
-                    <label for="feedback">Feedback</label>
-                </center>
-                <br>
-                <textarea type="text" id="feedback" name='feedback'required>{{ chamado.feedback }}</textarea>
-                <br>
-                <input type="text" name="idC" value="{{chamado.id}}" style="display: none;">
-                <input type="text" name="situ" value="Tratado" style="display: none;">
-                <br>
-                <div id="divbtntrat" style="display: none;">
-                    <button id='btnfeedback' type='submit'>Enviar Feedback</button>
-                    <br>
-                    <br>
-                </div>
-            </form>
-        </div>
+    <head>
+        <title>De Olho no Condomínio</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/css.css')}}" />
+        <link rel="icon" type="image/png" href="{{url_for('static', filename='img/fav.png')}}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/W3.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/FontAwesome4.7.0.css')}}">
+        <meta charset="UTF-8">
+        <script src="{{url_for('static', filename='js/jquery-3.7.0.js')}}"></script>
+        <script src="{{url_for('static', filename='js/js.js')}}"></script>
         <script>
-            function adm() {
-                const feed = document.getElementById("feed");
-                const tratar = document.getElementById("divbtntrat");
-                const cham =  document.getElementById("divbtncham");
-                var fdbk = document.getElementById("feedback").textContent;
+            function home(){
                 var UsTipo = "{{ usu.tipo }}";
-                var local = "{{ chamado.local }}";
+                var botao = document.getElementById('btnchamados');
 
                 if (UsTipo == '1'){
-                    feed.style.display = "block";
-                    document.getElementById('desc').readOnly = true;
-                    document.getElementById('local').readOnly = true;
-                    document.getElementById('dataprevista').readOnly = true;
-                    document.getElementById('freq').readOnly = true;
-                    document.getElementById('resp').readOnly = true;
-
-                    if (fdbk == null || fdbk == ''){
-                        tratar.style.display = "block";
-                    }else{
-                        document.getElementById('feedback').readOnly = true;
-                    }
-
+                    window.location.href = '/chamados';
                 }else{
+                    window.location.href = '/home';
+                }
+            }
 
-                    if (fdbk == null || fdbk == '' && local == null || local == ''){
-                        cham.style.display = "block";
-                    }else if(fdbk != null && fdbk != ''){
+            function direciona(){
+                var UsTipo = "{{ usu.tipo }}";
+                
+                if (UsTipo == '1'){
+                    window.location.href = '/confirmar';
+                }else{
+                    window.location.href = '/chamados';
+                }
+            }
+
+            function btndireciona(){
+                var UsTipo = "{{ usu.tipo }}";
+                var botao = document.getElementById('btnchamados');
+
+                if (UsTipo == '1'){
+                    botao.innerText = 'Cadastros';
+                }
+            }
+            window.onload = btndireciona;
+
+            document.addEventListener("DOMContentLoaded", function() {
+                    const imgs = document.querySelectorAll(".usr");
+                    const usrname = "{{ usu.nome_completo }}"; 
+
+                    function hashString(str) {
+                        let hash = 0;
+                        for (let i = 0; i < str.length; i++) {
+                            hash = (hash << 5) - hash + str.charCodeAt(i);
+                            hash |= 0;
+                        }
+                        return hash;
+                    }
+                    const hash = hashString(usrname);
+                    const number = (Math.abs(hash) % 6) + 1;
+
+                    imgs.forEach(img => {
+                        const currentSrc = img.getAttribute("src");
+                        const newSrc = currentSrc.replace(/(\d+)\.jpg/, `${number}.jpg`);
+                        img.setAttribute("src", newSrc);
+                    });
+                });
+        </script>
+    </head>
+    <body>
+        <div id="nav">
+            <i class="fa fa-bars menu" id="toggleButton"></i>
+            <a onclick="home()"><p class="menu texto">De Olho no Condomínio</p></a>
+            <div class="navusr">
+                <a onclick="logoff()">
+                    <h5>{{ usu.nome_completo }}</h5>
+                    <img class="usr" src="../static/img/6.jpg">
+                </a>
+            </div>
+        </div>
+        <div class="barralateral">
+            <div class="brins">
+                <center>
+                <h3>Gerenciar Perfil</h3>
+                <br>
+                <img class="usr" src="../static/img/6.jpg">
+                <h4 id="nomeusr">{{ usu.nome_completo }}</h4>
+                <h4 id="ap">{{ usu.endereco }}</h4>
+                <form id="edteml" action="">
+                    <input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly><a id="editaemail" onclick="editaremail()">Editar</a>
+                </form>
+                <form id="edttel" action="">
+                    <input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly><a id="editatel" onclick="editartel()">Editar</a>
+                </form>
+                <div class="menubottom" style="box-sizing: content-box; margin-top: 230px;">
+                    <div id="opcoes" class="hidden">
+                        <form id="pwdedt" action="" style="box-sizing: content-box;">
+                            <center>
+                                <input id="senhaant" name="senhaant" type="password" placeholder="Senha antiga">
+                                <br>
+                                <input id="senhanov" name="senhanov" type="password" placeholder="Nova senha">
+                                <br>
+                                <input id="senhaconf" name="senhaconf" type="password" placeholder="Confirme a senha">
+                            </center>
+                            <br>
+                            <div style="display: inline-block; width: 320px; margin: 0 10px;">
+                                <div style="float: left; width: 45%;">
+                                    <button id="cancelar" style="width: 100%;">Cancelar</button>
+                                </div>
+                                <div style="float: right; width: 45%;">
+                                    <button id="confirmar" style="width: 100%;" onclick="valida()">Confirmar</button>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                        </form>
+                    </div>
+                    <div id="altse" style="padding-top: 55px;">
+                        <center>
+                            <button onclick="direciona()" id="btnchamados">Chamados</button>
+                            <br>
+                            <button id="alterar">Alterar senha</button>
+                            <br>
+                            <button onclick="excluir()">Excluir perfil</button>
+                            <br>
+                            <br>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="barralateralbg">
+        </div>
+        <div class="corpo">
+            <center>
+                <h4 class="titulo">Abrir Reclamação</h4>
+            </center>
+            <form action="/que" method="POST">
+                <div class="campos">
+                    <div class="input-container">
+                        <label for="local">Unidade (local): </label>
+                        <input type="text" id="local" name="local" value="{{ chamado.local }}" required>
+                    </div>
+                    <br>
+                    <div class="input-container">
+                        <label for="dataprevista">Periodo Ocorrido: </label>
+                        <input type="text" id="dataprevista" name="dataprevista" value="{{ chamado.data }}" required>
+                    </div>
+                    <br>
+                    <div class="input-container">
+                        <label for="freq">Frequência: </label>
+                        <input type="text" id="freq" name="freq" value="{{ chamado.frequencia }}" required>
+                    </div>
+                    <br>
+                    <div class="input-container">
+                        <label for="resp">Responsável: </label>
+                        <input type="text" id="resp" name="resp" value="{{ chamado.responsavel }}" required>
+                    </div>
+                </div>
+                <br>
+                <center>
+                    <label for="desc">Descrição</label>
+                </center>
+                <br>
+                <br>
+                <textarea type="text" id="desc" name="descricao" required>{{ chamado.descricao }}</textarea>
+                <br>
+                <br>
+                <input type="text" name="autor" value="{{usu.nome_completo}}" style="display: none;">
+                <div id="divbtncham" style="display: none;">
+                    <button id="btnchamado" type="submit">Abrir Reclamação</button>
+                </div>
+            </form>
+            <br>
+            <div id="feed" style="display: none;">
+                <form id="fd" style="width: 100%;" action="/feed" method="POST">
+                    <center>
+                        <label for="feedback">Feedback</label>
+                    </center>
+                    <br>
+                    <textarea type="text" id="feedback" name='feedback'required>{{ chamado.feedback }}</textarea>
+                    <br>
+                    <input type="text" name="idC" value="{{chamado.id}}" style="display: none;">
+                    <input type="text" name="situ" value="Tratado" style="display: none;">
+                    <br>
+                    <div id="divbtntrat" style="display: none;">
+                        <button id='btnfeedback' type='submit'>Enviar Feedback</button>
+                        <br>
+                        <br>
+                    </div>
+                </form>
+            </div>
+            <script>
+                function adm() {
+                    const feed = document.getElementById("feed");
+                    const tratar = document.getElementById("divbtntrat");
+                    const cham =  document.getElementById("divbtncham");
+                    var fdbk = document.getElementById("feedback").textContent;
+                    var UsTipo = "{{ usu.tipo }}";
+                    var local = "{{ chamado.local }}";
+
+                    if (UsTipo == '1'){
                         feed.style.display = "block";
                         document.getElementById('desc').readOnly = true;
                         document.getElementById('local').readOnly = true;
                         document.getElementById('dataprevista').readOnly = true;
                         document.getElementById('freq').readOnly = true;
                         document.getElementById('resp').readOnly = true;
-                        document.getElementById('feedback').readOnly = true;
+
+                        if (fdbk == null || fdbk == ''){
+                            tratar.style.display = "block";
+                        }else{
+                            document.getElementById('feedback').readOnly = true;
+                        }
+
+                    }else{
+
+                        if (fdbk == null || fdbk == '' && local == null || local == ''){
+                            cham.style.display = "block";
+                        }else if(fdbk != null && fdbk != ''){
+                            feed.style.display = "block";
+                            document.getElementById('desc').readOnly = true;
+                            document.getElementById('local').readOnly = true;
+                            document.getElementById('dataprevista').readOnly = true;
+                            document.getElementById('freq').readOnly = true;
+                            document.getElementById('resp').readOnly = true;
+                            document.getElementById('feedback').readOnly = true;
+                        }
+                        
                     }
-                    
                 }
-            }
-            window.onload = adm;
-        </script>
-    </div>
-</body>
+                window.onload = adm;
+            </script>
+        </div>
+    </body>
 </html>
