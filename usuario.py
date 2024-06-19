@@ -47,6 +47,21 @@ class Usuario:
             'UsEndereco' : '',
             'UsTelefone' : self.telefone
         }
+    
+    def modificar(self):
+        mod = {
+            '$set':{
+                'UsEma':self.email,
+                'UsSenha':self.senha,
+                'UsTelefone':self.telefone
+            }
+        }
+
+        filtro = {'_id':self.id}
+
+        modificacao = coll.update_one(filtro, mod)
+
+        return
 
         
 

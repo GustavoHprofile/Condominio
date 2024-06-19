@@ -66,15 +66,15 @@
 				<img class="usr" src="../static/img/6.jpg">
 				<h4 id="nomeusr">{{ usu.nome_completo }}</h4>
 				<h4 id="ap">{{ usu.endereco }}</h4>
-				<form id="edteml" action="">
-					<input id="email" type="email" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly><a id="editaemail" onclick="editaremail()">Editar</a>
+				<form id="edteml" action="/ema?idU={{usu.id}}" method="POST">
+					<input id="email" type="email" name="ema" placeholder="email@email.com" value="{{ usu.email }}" autocomplete="off" readonly><a id="editaemail" onclick="editaremail()">Editar</a>
 				</form>
-				<form id="edttel" action="">
+				<form id="edttel" action="/tel?idU={{usu.id}}" method="POST">
 					<input type="tel" class="form-control" id="tel" name="tel" maxlength="15" pattern="\(\d{2}\)\s*\d{5}-\d{4}" placeholder="(99)99999-9999" value="{{ usu.telefone }}" autocomplete="off" readonly><a id="editatel" onclick="editartel()">Editar</a>
 				</form>
 				<div class="menubottom" style="box-sizing: content-box; margin-top: 230px;">
 					<div id="opcoes" class="hidden">
-						<form id="pwdedt" action="" style="box-sizing: content-box;">
+						<form id="pwdedt" action="/pas?idU={{usu.id}}" method="POST" style="box-sizing: content-box;">
 							<center>
 								<input id="senhaant" name="senhaant" type="password" placeholder="Senha antiga">
 								<br>
